@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'proy_ing_soft2';
+  constructor(private messageService: MessageService) { }
+
+  showSuccess() {
+    this.messageService.add({severity:'success', summary: 'Success', detail: 'Data Saved'});
+  }
+
 }
+
