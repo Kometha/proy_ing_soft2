@@ -27,7 +27,6 @@ export class LoginComponent {
       .iniciarSesion(this.emailOrAlias, this.password)
       .subscribe((sesiones: Sesion) => {
         console.log(sesiones);
-        this.router.navigateByUrl('/dashboard');
       });
   }
 }
