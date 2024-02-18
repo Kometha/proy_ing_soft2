@@ -28,7 +28,7 @@
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": ["src/favicon.ico", "src/assets", "src/app/web.config"],
             "styles": [
               "src/styles.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",

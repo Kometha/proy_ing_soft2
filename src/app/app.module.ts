@@ -10,24 +10,12 @@ import { LoginComponent } from './modules/mercadito/login/login.component';
 import { DashboardComponent } from './modules/mercadito/components/dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    DashboardComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    PrimeNgModule,
-    HttpClientModule
-  ],
-  providers: [
-    MessageService,
-    ConfirmationService,
-    DialogService,
-  ],
-  bootstrap: [AppComponent]
+  declarations: [AppComponent, LoginComponent, DashboardComponent],
+  imports: [BrowserModule, AppRoutingModule, PrimeNgModule, HttpClientModule],
+  providers: [MessageService, ConfirmationService, DialogService, { provide: LocationStrategy, useClass: HashLocationStrategy }],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
