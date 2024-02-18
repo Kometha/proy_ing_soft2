@@ -1,1 +1,182 @@
 <app-header colorClass="purple"> Mercadeo </app-header>
+<main class="text-appPrimary-50 p-5">
+  <div class="w-full grid grid-cols-12 gap-3">
+    <section class="flex flex-col col-start-1 col-end-4">
+      <header>
+        <h1 class="text-xl font-bold text-appPrimary-200">
+          ¡Bienvenido al módulo de Mercadeo!
+        </h1>
+        <small>Busca un producto para poder configurar</small>
+      </header>
+      <div class="mt-3 w-full flex flex-col gap-3">
+        <!-- Código de Producto -->
+        <div>
+          <label for="codigo"> Código de Producto</label>
+          <p-inputMask
+            mask="99-99-99-9999"
+            [(ngModel)]="codigoProductoBuscado"
+            (ngModelChange)="searchProducto()"
+            styleClass="bg-gray-700 w-full rounded-lg p-2 border border-gray-300 outline-none hover:ring-2 hover:ring-appPrimary-400 focus:ring-2 focus:ring-appPrimary-300 transition-all duration-300 ease-in-out"
+            placeholder="01-02-01-0001"
+          >
+          </p-inputMask>
+          <small class="text-xsm text-appPrimary-300">
+            Presione <kbd>F2</kbd> para buscar un producto
+          </small>
+        </div>
+        @if (newProducto) {
+        <!-- Imagen del Producto -->
+        <div
+          class="w-full rounded-lg flex justify-center items-center flex-col gap-3"
+        >
+          <img
+            src="https://via.placeholder.com/500"
+            alt="Producto"
+            class="rounded-lg w-full object-cover h-52"
+          />
+          <button
+            class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg hover:bg-white hover:text-appPrimary-700 transition-all duration-300 ease-in-out focus:outline-none"
+          >
+            Actualizar Imagen
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-cloud-upload"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"
+              />
+              <path d="M9 15l3 -3l3 3" />
+              <path d="M12 12l0 9" />
+            </svg>
+          </button>
+        </div>
+        }
+      </div>
+    </section>
+    <section class="w-full col-start-4 col-end-12 flex flex-col gap-3">
+      <header class="text-lg text-appPrimary-200">
+        Información del Producto
+      </header>
+      @if (!newProducto) {
+      <h3 class="text-red-300">
+        No se ha seleccionado un producto, por favor ingresa un código de
+        producto
+      </h3>
+      } @else {
+      <main class="w-full grid box-content grid-cols-2 p-2">
+        <fieldset class="flex flex-col gap-2">
+          <legend>Datos básicos</legend>
+          <div class="flex flex-col w-full mt-1 gap-2">
+            <!-- ! Descripción -->
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Descripción
+              </label>
+              <textarea
+                type="text"
+                id="input-group-1"
+                [(ngModel)]="newProducto.descripcion"
+                class="w-full resize-none h-20 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
+                placeholder="Sin descripción"
+              ></textarea>
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Familia
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                [value]="
+                  newProducto.subclase.categoria.familia.codigoFamilia +
+                  ' - ' +
+                  newProducto.subclase.categoria.familia.descripcion
+                "
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="Sin subclase"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Categoría
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                [value]="
+                  newProducto.subclase.categoria.codigoCategoria +
+                  ' - ' +
+                  newProducto.subclase.categoria.descripcion
+                "
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="Sin subclase"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Subclase
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                [value]="
+                  newProducto.subclase.codigoSubclase +
+                  ' - ' +
+                  newProducto.subclase.descripcion
+                "
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="Sin subclase"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Marca
+              </label>
+              <p-dropdown
+                [options]="marcas"
+                [(ngModel)]="newProducto.marca"
+                placeholder="Seleccionar marca"
+                emptyMessage="No hay marcas disponibles"
+                appendTo="body"
+                [filter]="true"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+              ></p-dropdown>
+            </span>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Lista de precios</legend>
+        </fieldset>
+      </main>
+      }
+    </section>
+  </div>
+</main>
