@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Permisos } from '../interfaces/permisos';
 import { PERMISOS_MODULOS } from '../../../config/config';
 import { PERMISOS_KEY } from '../../../config/config';
+import { Producto } from '../interfaces/producto';
 
 const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
@@ -86,6 +87,22 @@ export class ProyIngSoftService {
     },
     goDashboard: () => {
       this.router.navigate(['mercadito/dashboard']);
+    },
+  };
+
+  PRODUCTOS = {
+    getProductos: () => {
+      const url = `${URL_BASE}/productos`;
+      return this.http.get<ApiResponse<Producto[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
     },
   };
 }
