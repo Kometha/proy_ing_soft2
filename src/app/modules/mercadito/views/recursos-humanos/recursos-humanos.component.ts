@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-recursos-humanos',
+  selector: 'recursos-humanos-view',
   templateUrl: './recursos-humanos.component.html',
 })
-export class RecursosHumanosComponent {}
+export class RecursosHumanosView {}

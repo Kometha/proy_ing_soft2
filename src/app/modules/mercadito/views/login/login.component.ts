@@ -3,10 +3,10 @@ import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
 import { AlertaService } from '../../../../services/alertas/alerta.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login-view',
   templateUrl: './login.component.html',
 })
-export class LoginComponent {
+export class LoginView {
   constructor(
     private proySrv: ProyIngSoftService,
     private alerta: AlertaService

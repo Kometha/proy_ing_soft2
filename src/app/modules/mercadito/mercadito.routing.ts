@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './views/login/login.component';
-import { DashboardComponent } from './views/dashboard/dashboard.component';
+import { LoginView } from './views/login/login.component';
+import { DashboardView } from './views/dashboard/dashboard.component';
 import { SessionGuard } from './guards/session.guard';
-import { RecursosHumanosComponent } from './views/recursos-humanos/recursos-humanos.component';
+import { RecursosHumanosView } from './views/recursos-humanos/recursos-humanos.component';
 
 const routes: Routes = [
   {
@@ -13,17 +13,17 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent,
+    component: DashboardView,
     canActivate: [SessionGuard],
     canLoad: [SessionGuard],
   },
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginView,
   },
   {
     path: 'recursos-humanos',
-    component: RecursosHumanosComponent,
+    component: RecursosHumanosView,
     canActivate: [SessionGuard],
     canLoad: [SessionGuard],
   },
