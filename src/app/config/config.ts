@@ -8,4 +8,13 @@ export const Header = {
 
 export const WEB_SERVICE = environment.host;
 
-export const DATA_USER = 'usuario';
+export const DATA_USER_KEY = 'usuario';
+export const PERMISOS_KEY = 'permisos';
+
+export const PERMISOS_MODULOS = {
+  dashboard: null,
+  recursosHumanos: [1, 5, 6],
+  mercadeo: [1, 2, 6],
+  compras: [1, 3, 6],
+  ventas: [1, 4, 6],
+};

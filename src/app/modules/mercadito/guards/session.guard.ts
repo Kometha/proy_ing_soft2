@@ -8,7 +8,7 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DATA_USER } from '../../../config/config';
+import { DATA_USER_KEY } from '../../../config/config';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +32,9 @@ export class SessionGuard {
   }
 
   verificarSession() {
-    const userLogged = JSON.parse(sessionStorage.getItem(DATA_USER) ?? '{}');
+    const userLogged = JSON.parse(
+      sessionStorage.getItem(DATA_USER_KEY) ?? '{}'
+    );
 
     if (!userLogged.id) {
       this.router.navigate(['mercadito/login']);

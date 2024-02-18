@@ -8,25 +8,49 @@
       <a (click)="logout()">Cerrar sesión</a>
     </small>
   </section>
-  <section class="grid grid-rows-2 grid-cols-2 gap-3">
-    <a [routerLink]="['/mercadito/recursos-humanos']">
+  <section class="grid grid-rows-2 grid-cols-2 gap-3 max-md:grid-cols-1">
+    <a
+      [routerLink]="[
+        permisos.recursosHumanos ? '/mercadito/recursos-humanos' : '#'
+      ]"
+    >
       <app-module-card>
+        @if (permisos.recursosHumanos) {
         <h1>Recursos Humanos</h1>
+        } @else {
+        <h1 class="text-red-700">🚫 No autorizado</h1>
+        <small class="text-gray-700">Recursos Humanos</small>
+        }
       </app-module-card>
     </a>
-    <a [routerLink]="['/mercadito/compras']">
+    <a [routerLink]="[permisos.compras ? '/mercadito/compras' : '#']">
       <app-module-card>
+        @if (permisos.compras) {
         <h1>Compras</h1>
+        } @else {
+        <h1 class="text-red-700">🚫 No autorizado</h1>
+        <small class="text-gray-700">Compras</small>
+        }
       </app-module-card>
     </a>
-    <a [routerLink]="['/mercadito/ventas']">
+    <a [routerLink]="[permisos.ventas ? '/mercadito/ventas' : '#']">
       <app-module-card>
+        @if (permisos.ventas) {
         <h1>Ventas</h1>
+        } @else {
+        <h1 class="text-red-700">🚫 No autorizado</h1>
+        <small class="text-gray-700">Ventas</small>
+        }
       </app-module-card>
     </a>
-    <a [routerLink]="['/mercadito/mercadeo']">
+    <a [routerLink]="[permisos.mercadeo ? '/mercadito/mercadeo' : '']">
       <app-module-card>
+        @if (permisos.mercadeo) {
         <h1>Mercadeo</h1>
+        } @else {
+        <h1 class="text-red-700">🚫 No autorizado</h1>
+        <small class="text-gray-700">Mercadeo</small>
+        }
       </app-module-card>
     </a>
   </section>

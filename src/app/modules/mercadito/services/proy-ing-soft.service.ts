@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { DATA_USER, Header, WEB_SERVICE } from '../../../config/config';
+import { DATA_USER_KEY, Header, WEB_SERVICE } from '../../../config/config';
 import { EMPTY, catchError, map } from 'rxjs';
 import { AlertaService } from '../../../services/alertas/alerta.service';
 import { ApiResponse } from '../interfaces/api-response';
 import { Empleado } from '../interfaces/empleado';
 import { Router } from '@angular/router';
+import { Permisos } from '../interfaces/permisos';
+import { PERMISOS_MODULOS } from '../../../config/config';
+import { PERMISOS_KEY } from '../../../config/config';
 
 const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
@@ -36,17 +39,44 @@ export class ProyIngSoftService {
             this.alerta.showWarn(message);
             return;
           }
-          sessionStorage.setItem(DATA_USER, JSON.stringify(data));
+          sessionStorage.setItem(DATA_USER_KEY, JSON.stringify(data));
+          this.PERMISOS.setPermisos();
           this.alerta.showSuccess('Usuario autenticado correctamente');
           this.ROUTING.goDashboard();
+
           return data;
         }),
         catchError(this.handleError)
       );
     },
     logout: () => {
-      sessionStorage.removeItem(DATA_USER);
+      sessionStorage.removeItem(DATA_USER_KEY);
+      this.PERMISOS.deletePermisos();
       this.ROUTING.goLogin();
+    },
+  };
+
+  PERMISOS = {
+    setPermisos: () => {
+      const usuario = JSON.parse(
+        sessionStorage.getItem(DATA_USER_KEY) || '{}'
+      ) as Empleado;
+      const nuevosPermisos: Permisos = {
+        dashboard: true,
+        recursosHumanos: PERMISOS_MODULOS.recursosHumanos.includes(
+          usuario.puesto.id
+        ),
+        mercadeo: PERMISOS_MODULOS.mercadeo.includes(usuario.puesto.id),
+        compras: PERMISOS_MODULOS.compras.includes(usuario.puesto.id),
+        ventas: PERMISOS_MODULOS.ventas.includes(usuario.puesto.id),
+      };
+      sessionStorage.setItem(PERMISOS_KEY, JSON.stringify(nuevosPermisos));
+    },
+    getPermisos: () => {
+      return JSON.parse(sessionStorage.getItem(PERMISOS_KEY) || '{}');
+    },
+    deletePermisos: () => {
+      sessionStorage.removeItem(PERMISOS_KEY);
     },
   };
 
