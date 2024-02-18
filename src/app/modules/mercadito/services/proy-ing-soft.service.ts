@@ -38,11 +38,24 @@ export class ProyIngSoftService {
           }
           sessionStorage.setItem(DATA_USER, JSON.stringify(data));
           this.alerta.showSuccess('Usuario autenticado correctamente');
-          this.router.navigate(['mercadito/dashboard']);
+          this.ROUTING.goDashboard();
           return data;
         }),
         catchError(this.handleError)
       );
+    },
+    logout: () => {
+      sessionStorage.removeItem(DATA_USER);
+      this.ROUTING.goLogin();
+    },
+  };
+
+  ROUTING = {
+    goLogin: () => {
+      this.router.navigate(['mercadito/login']);
+    },
+    goDashboard: () => {
+      this.router.navigate(['mercadito/dashboard']);
     },
   };
 }

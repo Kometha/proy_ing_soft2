@@ -1,0 +1,65 @@
+<header
+  class="flex justify-between items-center bg-appPrimary-800 text-appPrimary-100 font-bold py-3 px-4"
+>
+  <section class="flex gap-3 items-center">
+    <img
+      src="https://i.ibb.co/SXKmKVb/logo.png"
+      width="50"
+      height="50"
+      alt="logo"
+      border="0"
+    />
+    <ng-content></ng-content>
+  </section>
+
+  <section class="flex gap-3">
+    <button
+      pTooltip="Regresar"
+      tooltipPosition="left"
+      pButton
+      (click)="goDashboard()"
+      class="rounded-full p-1 bg-yellow-500 text-white flex justify-center items-center hover:bg-yellow-700 focus:outline-none hover:scale-110 transition-all duration-300 ease-in-out hover:shadow-lg"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon icon-tabler icon-tabler-arrow-back-up"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M9 14l-4 -4l4 -4" />
+        <path d="M5 10h11a4 4 0 1 1 0 8h-1" />
+      </svg>
+    </button>
+    <button
+      pTooltip="Cerrar sesión"
+      tooltipPosition="left"
+      pButton
+      (click)="logout()"
+      class="rounded-full p-1 bg-red-500 text-white flex justify-center items-center hover:bg-red-700 focus:outline-none hover:scale-110 transition-all duration-300 ease-in-out hover:shadow-lg"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon icon-tabler icon-tabler-power"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M7 6a7.75 7.75 0 1 0 10 0" />
+        <path d="M12 4l0 8" />
+      </svg>
+    </button>
+  </section>
+</header>

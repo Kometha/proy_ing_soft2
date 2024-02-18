@@ -1,1 +1,28 @@
-<p>dashboard works!</p>
+<main
+  class="h-screen flex flex-col gap-3 justify-center items-center text-appPrimary-200"
+>
+  <section class="text-appPrimary-50 mb-3">
+    <h1>Bienvenido al sistema de Mercadito</h1>
+    <small> Selecciona un módulo para comenzar </small>
+    <small class="text-red-500 cursor-pointer hover:scale-75">
+      <a (click)="logout()">Cerrar sesión</a>
+    </small>
+  </section>
+  <section class="grid grid-rows-2 grid-cols-2 gap-3">
+    <a [routerLink]="['/mercadito/recursos-humanos']">
+      <app-module-card>
+        <h1>Recursos Humanos</h1>
+      </app-module-card>
+    </a>
+    <app-module-card>
+      <h1>Compras</h1>
+    </app-module-card>
+    <app-module-card>
+      <h1>Ventas</h1>
+    </app-module-card>
+    <app-module-card>
+      <h1>Mercadeo</h1>
+    </app-module-card>
+  </section>
+</main>
+<router-outlet></router-outlet>
