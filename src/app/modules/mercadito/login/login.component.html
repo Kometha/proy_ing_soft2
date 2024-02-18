@@ -1,0 +1,31 @@
+<main class="main-login">
+  <p-card class="flex justify-content-center align-items-center">
+    <h2 class="text-center font-bold text-xl">Iniciar Sesión</h2>
+    <div class="form-container">
+      <form class="flex flex-column" #loginForm="ngForm">
+        <input
+          class="border-solid mt-2 p-3 border-round-md"
+          type="text"
+          placeholder="Correo electrónico o Alias"
+          [(ngModel)]="emailOrAlias"
+          name="usuario"
+          required
+        />
+        <input
+          class="border-solid mt-2 p-3 border-round-md"
+          type="password"
+          placeholder="Contraseña"
+          [(ngModel)]="password"
+          name="contrasenia"
+          required
+        />
+        <div class="flex flex-column align-items-center gap-1">
+          <p>¿Necesitas ayuda? </p>
+          <a href="#">Contacto a Soporte Técnico.</a>
+        </div>
+        <p-button (onClick)="iniciarSesion()" label="INGRESAR" class="mt-3 px-6 py-3 text-lg justify-content-center"></p-button>
+      </form>
+    </div>
+  </p-card>
+</main>
+

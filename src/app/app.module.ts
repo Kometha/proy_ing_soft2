@@ -6,8 +6,9 @@ import { AppComponent } from './app.component';
 import { PrimeNgModule } from './modules/prime-ng/prime-ng.module';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { LoginComponent } from './modules/mercadito/components/login/login.component';
+import { LoginComponent } from './modules/mercadito/login/login.component';
 import { DashboardComponent } from './modules/mercadito/components/dashboard/dashboard.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { DashboardComponent } from './modules/mercadito/components/dashboard/das
   imports: [
     BrowserModule,
     AppRoutingModule,
-    PrimeNgModule
+    PrimeNgModule,
+    HttpClientModule
   ],
   providers: [
     MessageService,

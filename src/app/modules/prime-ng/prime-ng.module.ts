@@ -41,6 +41,8 @@ import { TimelineModule } from 'primeng/timeline';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
+import { FormsModule } from '@angular/forms';
+
 
 
 @NgModule({
@@ -86,6 +88,7 @@ import { TooltipModule } from 'primeng/tooltip';
     ToggleButtonModule,
     ToolbarModule,
     TooltipModule,
+    FormsModule,
   ],
 })
 export class PrimeNgModule {}
