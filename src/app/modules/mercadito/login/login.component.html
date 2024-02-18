@@ -1,15 +1,19 @@
 <main class="main-login">
-  <div class="p-d-flex p-jc-center p-ai-center p-dir-col">
-    <div class="text-center display-block m-0">
-      <img src="https://i.ibb.co/SXKmKVb/logo.png" width="150" height="150" alt="logo"  border="0">
-    </div>
+  <div class="flex justify-content-center mb-2">
+    <img
+      src="https://i.ibb.co/SXKmKVb/logo.png"
+      width="150"
+      height="150"
+      alt="logo"
+      border="0"
+    />
   </div>
   <p-card class="flex justify-content-center align-items-center">
-    <h2 class="text-center font-bold text-xl">Iniciar Sesión</h2>
+    <h2 class="text-center font-bold text-xl text-blue-500">Iniciar Sesión</h2>
     <div class="form-container">
-      <form class="flex flex-column" >
+      <form class="flex flex-column gap-3">
         <input
-          class="border-solid mt-2 p-3 border-round-md"
+          class="border-solid p-3 border-round-md"
           type="text"
           placeholder="Correo electrónico o Alias"
           [(ngModel)]="emailOrAlias"
@@ -24,13 +28,19 @@
           name="contrasenia"
           required
         />
-        <div class="flex flex-column align-items-center gap-1">
-          <p>¿Necesitas ayuda? </p>
-          <a href="#">Contacto a Soporte Técnico.</a>
+        <div class="flex flex-column align-items-center">
+          <span>¿Necesitas ayuda?</span>
+          <a href="#">Contacto a Soporte Técnico</a>
         </div>
-        <p-button (onClick)="iniciarSesion()" label="INGRESAR" class="mt-3 px-6 py-3 text-lg justify-content-center"></p-button>
+        <div class="flex justify-content-center">
+          <p-button
+            (onClick)="iniciarSesion()"
+            label="INGRESAR"
+            class="text-lg"
+          >
+          </p-button>
+        </div>
       </form>
     </div>
   </p-card>
 </main>
-
