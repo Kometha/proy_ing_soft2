@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-  HttpParams,
-} from '@angular/common/http';
-import { Header, WEB_SERVICE } from '../../../config/config';
-import { BehaviorSubject, EMPTY, Observable, catchError, map } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DATA_USER, Header, WEB_SERVICE } from '../../../config/config';
+import { EMPTY, catchError, map } from 'rxjs';
+import { AlertaService } from '../../../services/alertas/alerta.service';
+import { ApiResponse } from '../interfaces/api-response';
+import { Empleado } from '../interfaces/empleado';
+import { Router } from '@angular/router';
 
 const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
@@ -15,29 +14,35 @@ let headers = new HttpHeaders(Header);
   providedIn: 'root',
 })
 export class ProyIngSoftService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private alerta: AlertaService,
+    private router: Router
+  ) {}
 
   private handleError = (err: { error: { message: string } }): typeof EMPTY => {
     const message: string = err?.error?.message;
-    console.error(message);
+    this.alerta.showError(message);
     return EMPTY;
   };
 
-  iniciarSesion(emailOrAlias: string, password: string): Observable<Sesion> {
-    const url = `${URL_BASE}/login/${emailOrAlias}/${password}`;
+  LOGIN = {
+    iniciarSesion: (emailOrAlias: string, password: string) => {
+      const url = `${URL_BASE}/login/${emailOrAlias}/${password}`;
 
-    return this.http.get<Sesion>(url, { headers }).pipe(
-      map((sesiones: Sesion) => {
-        sessionStorage.setItem('usuario', sesiones.usuario);
-        sessionStorage.setItem('contrasenia', sesiones.contrasenia);
-        return sesiones;
-      }),
-      catchError(this.handleError)
-    );
-  }
-}
-
-export interface Sesion {
-  usuario: string;
-  contrasenia: string;
+      return this.http.get<ApiResponse<Empleado>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return;
+          }
+          sessionStorage.setItem(DATA_USER, JSON.stringify(data));
+          this.alerta.showSuccess('Usuario autenticado correctamente');
+          this.router.navigate(['mercadito/dashboard']);
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
+  };
 }

@@ -1,31 +1,64 @@
 import { Injectable } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AlertaService {
+  baseClass = 'rounded-full transition-all duration-300 ease-in-out';
+  baseContentClass = 'flex justify-center items-center';
+  constructor(private toast: MessageService) {}
 
-  constructor(
-    private messageService: MessageService
-  ) { }
-
-  // <p-toast key="alerta1"></p-toast>
-  // Se encuentra en app.main.component.html
-
-  showSuccess(mensaje: string) {
-    this.messageService.add({key: 'alerta1', severity:'success', summary:'Exito!', detail: mensaje});
+  showSuccess(message: string) {
+    this.toast.add({
+      severity: 'success',
+      key: 'alertaGeneral',
+      summary: 'Éxito',
+      life: 3000,
+      contentStyleClass: 'bg-green-200 text-green-900',
+      styleClass: `${this.baseClass} bg-green-200 text-green-900 hover:bg-green-900 hover:text-green-200`,
+      detail: message,
+    });
   }
 
-  showInfo(mensaje: string) {
-    this.messageService.add({key: 'alerta1', severity:'info', summary:'Mensaje!', detail: mensaje});
+  showError(message: string) {
+    this.toast.add({
+      severity: 'error',
+      key: 'alertaGeneral',
+      life: 3000,
+      contentStyleClass: this.baseContentClass,
+      styleClass: `${this.baseClass} bg-red-200 text-red-900 hover:bg-red-900 hover:text-red-200`,
+      summary: 'Error',
+      detail: message,
+    });
   }
 
-  showWarning(mensaje: string) {
-    this.messageService.add({key: 'alerta1', severity:'warn', summary:'Advertencia!', detail: mensaje});
+  showWarn(message: string) {
+    this.toast.add({
+      severity: 'warn',
+      key: 'alertaGeneral',
+      summary: 'Advertencia',
+      closable: true,
+      life: 3000,
+      contentStyleClass: this.baseContentClass,
+      styleClass: `${this.baseClass} bg-yellow-200 text-yellow-900 hover:bg-yellow-900 hover:text-yellow-200`,
+      detail: message,
+    });
   }
 
-  showError(mensaje: string) {
-    this.messageService.add({key: 'alerta1', severity:'error', summary:'Error!', detail: mensaje, sticky:true});
+  showInfo(message: string) {
+    this.toast.add({
+      severity: 'info',
+      key: 'alertaGeneral',
+      summary: 'Información',
+      life: 3000,
+      contentStyleClass: this.baseContentClass,
+      styleClass: `${this.baseClass} bg-blue-200 text-blue-900 hover:bg-blue-900 hover:text-blue-200`,
+      detail: message,
+    });
+  }
+
+  showCustom(message: Message) {
+    this.toast.add({ ...message, key: 'alertaGeneral' });
   }
 }
