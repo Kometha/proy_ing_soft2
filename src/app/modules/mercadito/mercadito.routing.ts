@@ -4,6 +4,9 @@ import { LoginView } from './views/login/login.component';
 import { DashboardView } from './views/dashboard/dashboard.component';
 import { SessionGuard } from './guards/session.guard';
 import { RecursosHumanosView } from './views/recursos-humanos/recursos-humanos.component';
+import { MercadeoView } from './views/mercadeo/mercadeo.component';
+import { ComprasView } from './views/compras/compras.component';
+import { VentasView } from './views/ventas/ventas.component';
 
 const routes: Routes = [
   {
@@ -27,6 +30,25 @@ const routes: Routes = [
     canActivate: [SessionGuard],
     canLoad: [SessionGuard],
   },
+  {
+    path: 'mercadeo',
+    component: MercadeoView,
+    canActivate: [SessionGuard],
+    canLoad: [SessionGuard],
+  },
+  {
+    path: 'compras',
+    component: ComprasView,
+    canActivate: [SessionGuard],
+    canLoad: [SessionGuard],
+  },
+  {
+    path: 'ventas',
+    component: VentasView,
+    canActivate: [SessionGuard],
+    canLoad: [SessionGuard],
+  },
+
   {
     path: '**',
     redirectTo: 'dashboard',

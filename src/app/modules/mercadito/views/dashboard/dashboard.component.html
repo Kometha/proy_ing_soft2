@@ -14,15 +14,21 @@
         <h1>Recursos Humanos</h1>
       </app-module-card>
     </a>
-    <app-module-card>
-      <h1>Compras</h1>
-    </app-module-card>
-    <app-module-card>
-      <h1>Ventas</h1>
-    </app-module-card>
-    <app-module-card>
-      <h1>Mercadeo</h1>
-    </app-module-card>
+    <a [routerLink]="['/mercadito/compras']">
+      <app-module-card>
+        <h1>Compras</h1>
+      </app-module-card>
+    </a>
+    <a [routerLink]="['/mercadito/ventas']">
+      <app-module-card>
+        <h1>Ventas</h1>
+      </app-module-card>
+    </a>
+    <a [routerLink]="['/mercadito/mercadeo']">
+      <app-module-card>
+        <h1>Mercadeo</h1>
+      </app-module-card>
+    </a>
   </section>
 </main>
 <router-outlet></router-outlet>

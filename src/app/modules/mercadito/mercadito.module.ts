@@ -9,6 +9,9 @@ import { ModuleCardComponent } from './views/dashboard/components/module-card/mo
 import { RouterModule } from '@angular/router';
 import { RecursosHumanosView } from './views/recursos-humanos/recursos-humanos.component';
 import { HeaderComponent } from './components/header/header.component';
+import { ComprasView } from './views/compras/compras.component';
+import { MercadeoView } from './views/mercadeo/mercadeo.component';
+import { VentasView } from './views/ventas/ventas.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +19,9 @@ import { HeaderComponent } from './components/header/header.component';
     LoginView,
     DashboardView,
     RecursosHumanosView,
+    ComprasView,
+    MercadeoView,
+    VentasView,
 
     // ! Components
     HeaderComponent,
