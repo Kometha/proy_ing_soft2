@@ -7,6 +7,7 @@ import { RecursosHumanosView } from './views/recursos-humanos/recursos-humanos.c
 import { MercadeoView } from './views/mercadeo/mercadeo.component';
 import { ComprasView } from './views/compras/compras.component';
 import { VentasView } from './views/ventas/ventas.component';
+import { PermisosGuard } from './guards/permisos.guard';
 
 const routes: Routes = [
   {
@@ -15,38 +16,33 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'dashboard',
-    component: DashboardView,
-    canActivate: [SessionGuard],
-    canLoad: [SessionGuard],
-  },
-  {
     path: 'login',
     component: LoginView,
   },
   {
+    path: 'dashboard',
+    component: DashboardView,
+    canActivate: [SessionGuard, PermisosGuard],
+  },
+  {
     path: 'recursos-humanos',
     component: RecursosHumanosView,
-    canActivate: [SessionGuard],
-    canLoad: [SessionGuard],
+    canActivate: [SessionGuard, PermisosGuard],
   },
   {
     path: 'mercadeo',
     component: MercadeoView,
-    canActivate: [SessionGuard],
-    canLoad: [SessionGuard],
+    canActivate: [SessionGuard, PermisosGuard],
   },
   {
     path: 'compras',
     component: ComprasView,
-    canActivate: [SessionGuard],
-    canLoad: [SessionGuard],
+    canActivate: [SessionGuard, PermisosGuard],
   },
   {
     path: 'ventas',
     component: VentasView,
-    canActivate: [SessionGuard],
-    canLoad: [SessionGuard],
+    canActivate: [SessionGuard, PermisosGuard],
   },
 
   {
