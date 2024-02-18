@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { EmpleadosComponent } from './components/empleados/empleados.component';
 import { SharedModule } from 'primeng/api';
+import { RrhhComponent } from './components/rrhh/rrhh.component';
 
 @NgModule({
   declarations: [
-    EmpleadosComponent
+    EmpleadosComponent,
+    RrhhComponent
   ],
   imports: [CommonModule, SharedModule],
 })
