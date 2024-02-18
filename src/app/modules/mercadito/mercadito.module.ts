@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MercaditoRoutingModule } from './mercadito.routing';
 import { LoginComponent } from './login/login.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { PrimeNgModule } from '../prime-ng/prime-ng.module';
 
 @NgModule({

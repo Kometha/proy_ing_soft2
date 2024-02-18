@@ -30,6 +30,7 @@ svg {
 body {
   margin: 0;
   min-width: 100dvh;
+  color-scheme: dark light;
 }
 
 h1,
@@ -47,4 +48,5 @@ p {
 
 html {
   background: linear-gradient(to bottom, #0c1213, #060909) no-repeat fixed;
+  color-scheme: dark light;
 }
