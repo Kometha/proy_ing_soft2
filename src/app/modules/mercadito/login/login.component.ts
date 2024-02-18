@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ProyIngSoftService, Sesion } from '../services/proy-ing-soft.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,15 +18,16 @@ import { ProyIngSoftService, Sesion } from '../services/proy-ing-soft.service';
   ],
 })
 export class LoginComponent {
-  constructor(private proySrv: ProyIngSoftService) {}
+  constructor(private proySrv: ProyIngSoftService, private router: Router) {}
   emailOrAlias = '';
   password = '';
 
   iniciarSesion() {
     this.proySrv
       .iniciarSesion(this.emailOrAlias, this.password)
-      .subscribe((sesiones: Sesion[]) => {
+      .subscribe((sesiones: Sesion) => {
         console.log(sesiones);
+        this.router.navigateByUrl('/dashboard');
       });
   }
 }

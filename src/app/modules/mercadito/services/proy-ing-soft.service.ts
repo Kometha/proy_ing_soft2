@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Header, WEB_SERVICE } from '../../../config/config';
 import { BehaviorSubject, EMPTY, Observable, catchError, map } from 'rxjs';
 
@@ -7,9 +12,8 @@ const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class ProyIngSoftService {
   constructor(private http: HttpClient) {}
 
@@ -19,21 +23,18 @@ export class ProyIngSoftService {
     return EMPTY;
   };
 
-  iniciarSesion(emailOrAlias: string, password: string): Observable<Sesion[]> {
+  iniciarSesion(emailOrAlias: string, password: string): Observable<Sesion> {
     const url = `${URL_BASE}/login/${emailOrAlias}/${password}`;
 
-    return this.http.get<Sesion[]>(url, { headers }).pipe(
-      map((sesiones: Sesion[]) => {
-        if (sesiones.length > 0) {
-          sessionStorage.setItem('usuario', sesiones[0].usuario);
-          sessionStorage.setItem('contrasenia', sesiones[0].contrasenia);
-        }
+    return this.http.get<Sesion>(url, { headers }).pipe(
+      map((sesiones: Sesion) => {
+        sessionStorage.setItem('usuario', sesiones.usuario);
+        sessionStorage.setItem('contrasenia', sesiones.contrasenia);
         return sesiones;
       }),
       catchError(this.handleError)
     );
   }
-
 }
 
 export interface Sesion {
