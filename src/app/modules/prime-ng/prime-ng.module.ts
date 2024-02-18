@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -41,16 +39,15 @@ import { TimelineModule } from 'primeng/timeline';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
+
+import { TRADUCCION_ESP } from './traduccion';
+import { PrimeNGConfig } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
-
-
 
 @NgModule({
   exports: [
     ButtonModule,
     DropdownModule,
-    BrowserModule,
-    BrowserAnimationsModule,
     AutoFocusModule,
     InputTextModule,
     ProgressBarModule,
@@ -91,4 +88,8 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
   ],
 })
-export class PrimeNgModule {}
+export class PrimeNgModule {
+  constructor(private primeNGConfig: PrimeNGConfig) {
+    this.primeNGConfig.setTranslation(TRADUCCION_ESP);
+  }
+}

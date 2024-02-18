@@ -1,0 +1,58 @@
+<main
+  class="h-screen flex flex-col gap-3 justify-center items-center text-appPrimary-200 p-3"
+>
+  <section class="text-appPrimary-50 mb-3">
+    <h1>Bienvenido al sistema de Mercadito</h1>
+    <small> Selecciona un módulo para comenzar </small>
+    <small class="text-red-500 cursor-pointer hover:scale-75">
+      <a (click)="logout()">Cerrar sesión</a>
+    </small>
+  </section>
+  <section class="grid grid-rows-2 grid-cols-2 gap-3 max-md:grid-cols-1">
+    <a
+      [routerLink]="[
+        permisos.recursosHumanos ? '/mercadito/recursos-humanos' : '#'
+      ]"
+    >
+      <app-module-card>
+        @if (permisos.recursosHumanos) {
+        <h1>Recursos Humanos</h1>
+        } @else {
+        <h1 class="text-red-700">🚫 No autorizado</h1>
+        <small class="text-gray-700">Recursos Humanos</small>
+        }
+      </app-module-card>
+    </a>
+    <a [routerLink]="[permisos.compras ? '/mercadito/compras' : '#']">
+      <app-module-card>
+        @if (permisos.compras) {
+        <h1>Compras</h1>
+        } @else {
+        <h1 class="text-red-700">🚫 No autorizado</h1>
+        <small class="text-gray-700">Compras</small>
+        }
+      </app-module-card>
+    </a>
+    <a [routerLink]="[permisos.ventas ? '/mercadito/ventas' : '#']">
+      <app-module-card>
+        @if (permisos.ventas) {
+        <h1>Ventas</h1>
+        } @else {
+        <h1 class="text-red-700">🚫 No autorizado</h1>
+        <small class="text-gray-700">Ventas</small>
+        }
+      </app-module-card>
+    </a>
+    <a [routerLink]="[permisos.mercadeo ? '/mercadito/mercadeo' : '']">
+      <app-module-card>
+        @if (permisos.mercadeo) {
+        <h1>Mercadeo</h1>
+        } @else {
+        <h1 class="text-red-700">🚫 No autorizado</h1>
+        <small class="text-gray-700">Mercadeo</small>
+        }
+      </app-module-card>
+    </a>
+  </section>
+</main>
+<router-outlet></router-outlet>
