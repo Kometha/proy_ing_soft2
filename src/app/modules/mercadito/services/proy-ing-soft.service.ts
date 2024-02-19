@@ -10,6 +10,7 @@ import { Permisos } from '../interfaces/permisos';
 import { PERMISOS_MODULOS } from '../../../config/config';
 import { PERMISOS_KEY } from '../../../config/config';
 import { Producto } from '../interfaces/producto';
+import { Marca } from '../interfaces/misc-types';
 
 const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
@@ -113,5 +114,21 @@ export class ProyIngSoftService {
         map(response => response.data), // Accede a la propiedad 'data' de la respuesta
         catchError(this.handleError)
       );
+  };
+
+  MARCAS = {
+    getMarcas: () => {
+      const url = `${URL_BASE}/marcas`;
+      return this.http.get<ApiResponse<Marca[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
   };
 }

@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
@@ -50,6 +51,7 @@ import { FormsModule } from '@angular/forms';
     DropdownModule,
     AutoFocusModule,
     InputTextModule,
+    InputMaskModule,
     ProgressBarModule,
     ProgressSpinnerModule,
     TableModule,
