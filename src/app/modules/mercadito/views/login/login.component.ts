@@ -9,7 +9,7 @@ import { AlertaService } from '../../../../services/alertas/alerta.service';
 export class LoginView {
   constructor(
     private proySrv: ProyIngSoftService,
-    private alerta: AlertaService
+    private alerta: AlertaService,
   ) {}
   emailOrAlias = '';
   password = '';

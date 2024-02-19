@@ -48,3 +48,8 @@ export interface Categoria {
   descripcion: string;
   codigoCategoria: string;
 }
+export interface Puesto {
+  id: number;
+  createdAt: Date;
+  descripcion: string;
+}

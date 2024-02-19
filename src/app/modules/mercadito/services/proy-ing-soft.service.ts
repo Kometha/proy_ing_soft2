@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DATA_USER_KEY, Header, WEB_SERVICE } from '../../../config/config';
-import { EMPTY, catchError, map } from 'rxjs';
+import { EMPTY, Observable, catchError, map } from 'rxjs';
 import { AlertaService } from '../../../services/alertas/alerta.service';
 import { ApiResponse } from '../interfaces/api-response';
 import { Empleado } from '../interfaces/empleado';
@@ -104,5 +104,14 @@ export class ProyIngSoftService {
         catchError(this.handleError)
       );
     },
+  };
+
+  getEmpleados(): Observable<Empleado[]> {
+    return this.http
+      .get<any>(`${URL_BASE}/empleados`, { headers }) // Ajusta any a la estructura real de tu respuesta
+      .pipe(
+        map(response => response.data), // Accede a la propiedad 'data' de la respuesta
+        catchError(this.handleError)
+      );
   };
 }
