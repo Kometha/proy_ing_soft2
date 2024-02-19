@@ -2,20 +2,210 @@
 <main class="p-4">
   <div class="grid gap-3">
     <div
-      class="text-center p-3 border-round-sm  font-bold col-start-1 col-end-3"
+      class="text-center p-3 border-round-sm font-bold col-start-1 col-end-4"
     >
-    <div class="flex items-center justify-center">
-      <img src="https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg" class="object-contain h-48 w-96">
+      <div
+        class="w-full rounded-lg flex justify-center items-center flex-col gap-3"
+      >
+        <img
+          src="https://via.placeholder.com/800"
+          alt="Usuario"
+          class="rounded-lg w-full object-cover h-96"
+        />
+      </div>
+      <h1 class="text-white text-xl p-3">[  Nombre, Apellido  ]</h1>
+      <label class="block">
+        <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 w-9/12	 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
+              />
+            </label>
+            <small class="text-white">Busca un empleado por su código o registra uno*</small>
     </div>
-    <label class="block">
-      <span class="block text-sm font-medium text-white">Número de Cuenta</span>
-      <input class="border-slate-200 text-white w-1/3" />
-    </label>
-    </div>
-    <div
-      class="text-center p-3 border-round-sm bg-appPrimary-300 font-bold col-start-3 col-end-12"
-    >
-      auto
-    </div>
+    <section class="col-start-4 col-end-12 flex flex-col gap-3">
+      <header class="text-lg text-appPrimary-200">Datos del empleado</header>
+      <main class="w-full grid box-content grid-cols-2 p-2">
+        <fieldset class="flex flex-col gap-2">
+          <div class="flex flex-col w-11/12 mt-1 gap-2">
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Nombres
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="N/A"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Apellidos
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="N/A"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Email
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="N/A"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Telefono
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="N/A"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Salario
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="18000.00"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Observaciones
+              </label>
+              <textarea
+                type="text"
+                id="input-group-1"
+                class="w-full resize-none h-20 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
+                placeholder="Sin Observaciones"
+              ></textarea>
+            </span>
+          </div>
+        </fieldset>
+        <fieldset class="flex flex-col">
+          <div class="flex flex-col w-11/12 mt-1 gap-2">
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Alias
+              </label>
+              <input
+                type="text"
+                id="input-group-1"
+                [disabled]="true"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="crywhat, dgallo, nlopez..."
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Puesto
+              </label>
+              <p-dropdown
+                placeholder="Seleccionar un puesto"
+                emptyMessage="No hay marcas disponibles"
+                appendTo="body"
+                [filter]="true"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+              ></p-dropdown>
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Genero
+              </label>
+              <p-dropdown
+                placeholder="Seleccionar un género"
+                emptyMessage="No hay marcas disponibles"
+                appendTo="body"
+                [filter]="true"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+              ></p-dropdown>
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Tipo Pago
+              </label>
+              <p-dropdown
+                placeholder="Seleccionar un tipo de pago"
+                emptyMessage="No hay marcas disponibles"
+                appendTo="body"
+                [filter]="true"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+              ></p-dropdown>
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Inhabilitado
+              </label>
+              <p-inputSwitch></p-inputSwitch>
+
+
+            </span>
+          </div>
+        </fieldset>
+      </main>
+    </section>
   </div>
+  <footer class="flex items-center justify-end ">
+
+    <button class="flex justify-center  bg-white py-2 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-floppy" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
+      GUARDAR
+    </button>
+  </footer>
 </main>

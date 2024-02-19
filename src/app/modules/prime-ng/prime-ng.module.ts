@@ -44,6 +44,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TRADUCCION_ESP } from './traduccion';
 import { PrimeNGConfig } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
+import { InputSwitchModule } from 'primeng/inputswitch';
+
 
 @NgModule({
   exports: [
@@ -88,6 +90,7 @@ import { FormsModule } from '@angular/forms';
     ToolbarModule,
     TooltipModule,
     FormsModule,
+    InputSwitchModule
   ],
 })
 export class PrimeNgModule {
