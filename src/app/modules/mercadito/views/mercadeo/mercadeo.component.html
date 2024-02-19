@@ -1,7 +1,7 @@
 <app-header colorClass="purple"> Mercadeo </app-header>
 <main class="text-appPrimary-50 p-5">
-  <div class="w-full grid grid-cols-12 gap-3">
-    <section class="flex flex-col col-start-1 col-end-4">
+  <div class="w-full grid grid-cols-12 max-md:grid-cols-1 gap-3">
+    <section class="flex flex-col col-start-1 col-end-4 max-md:col-start-1 max-md:col-end-1">
       <header>
         <h1 class="text-xl font-bold text-appPrimary-200">
           ¡Bienvenido al módulo de Mercadeo!
@@ -105,7 +105,7 @@
         }
       </div>
     </section>
-    <section class="w-full col-start-4 col-end-13 flex flex-col gap-3">
+    <section class="w-full col-start-4 col-end-13 flex flex-col gap-3 max-md:col-start-1 max-md:col-end-1">
       <header class="text-lg text-appPrimary-200">
         Información del Producto
       </header>
@@ -115,7 +115,7 @@
         producto
       </h3>
       } @else {
-      <main class="w-full grid box-content grid-cols-2 p-2 gap-3">
+      <main class="w-full grid box-content grid-cols-2 p-2 gap-3 max-md:grid-cols-1">
         <fieldset class="flex flex-col gap-2">
           <legend>Datos básicos</legend>
           <div class="flex flex-col w-full mt-1 gap-2">

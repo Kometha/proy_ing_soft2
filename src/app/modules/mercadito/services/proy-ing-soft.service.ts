@@ -33,7 +33,7 @@ export class ProyIngSoftService {
   ) {}
 
   private handleError = (err: { error: { message: string } }): typeof EMPTY => {
-    const message: string = err?.error?.message;
+    const message: string = err?.error?.message ?? 'Error desconocido';
     this.alerta.showError(message);
     return EMPTY;
   };
@@ -209,9 +209,9 @@ export class ProyIngSoftService {
   };
 
   EMPLEADOS = {
-    getEmpleados: (): Observable<Empleado[]> => {
+    getEmpleados: () => {
       return this.http
-        .get<any>(`${URL_BASE}/empleados`, { headers }) // Ajusta any a la estructura real de tu respuesta
+        .get<ApiResponse<Empleado[]>>(`${URL_BASE}/empleados`, { headers }) // Ajusta any a la estructura real de tu respuesta
         .pipe(
           map((response) => response.data), // Accede a la propiedad 'data' de la respuesta
           catchError(this.handleError)
