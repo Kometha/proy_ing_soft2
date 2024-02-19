@@ -105,6 +105,30 @@ export class ProyIngSoftService {
         catchError(this.handleError)
       );
     },
+    updateProducto: ({
+      id,
+      descripcion,
+      marca: { id: idMarca },
+      inhabilitado,
+      oferta,
+    }: Producto) => {
+      const url = `${URL_BASE}/productos/${id}`;
+      const body = {
+        descripcion,
+        idMarca,
+        inhabilitado,
+        oferta,
+      };
+      return this.http.put<ApiResponse<Producto>>(url, body, { headers }).pipe(
+        map(({ isSuccess, message }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+        }),
+        catchError(this.handleError)
+      );
+    },
   };
 
   EMPLEADOS = {

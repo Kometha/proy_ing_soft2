@@ -87,6 +87,29 @@ export class MercadeoView {
     });
   }
 
+  updateProducto() {
+    this.pryService.PRODUCTOS.updateProducto(this.newProducto!).subscribe(
+      () => {
+        this.getProductos();
+        this.alerta.showSuccess('Producto actualizado');
+      }
+    );
+  }
+
+  handleClickOferta() {
+    this.newProducto!.oferta = !this.newProducto!.oferta;
+    this.updateProducto();
+  }
+
+  handleClickInhabilitado() {
+    this.newProducto!.inhabilitado = !this.newProducto!.inhabilitado;
+    this.updateProducto();
+  }
+
+  handleClickSave() {
+    this.updateProducto();
+  }
+
   searchProducto() {
     if (this.codigoProductoBuscado === '') {
       this.alerta.showWarn('Ingrese un código de producto');
