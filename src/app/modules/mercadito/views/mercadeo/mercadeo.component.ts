@@ -1,14 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
 import { Producto } from '../../interfaces/producto';
 import { AlertaService } from '../../../../services/alertas/alerta.service';
-import { Marca, TipoUnidad } from '../../interfaces/misc-types';
+import {
+  Categoria,
+  Familia,
+  Marca,
+  Subclase,
+  TipoUnidad,
+} from '../../interfaces/misc-types';
+import { IMAGES_FOLDERS, URL_BASE } from '../../../../config/config';
+
+const IMAGENES_PRODUCTO_URL_BASE = `${URL_BASE}/${IMAGES_FOLDERS.productos}/`;
 
 @Component({
   selector: 'mercadeo-view',
   templateUrl: './mercadeo.component.html',
 })
 export class MercadeoView {
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    const isF2 = event.key === 'F2';
+    const isF8 = event.key === 'F8';
+    if (isF2) {
+      this.toggleModalBuscarProducto();
+    }
+    if (isF8) {
+      this.toggleModalCrearProducto();
+    }
+  }
+
+  IMAGENES_PRODUCTO_URL_BASE = IMAGENES_PRODUCTO_URL_BASE;
+
   productos: Producto[] = [];
   producto?: Producto;
   newProducto?: Producto;
@@ -21,17 +44,50 @@ export class MercadeoView {
     precio: 0,
   };
 
-  codigoProductoBuscado = '01-02-01-0001';
+  codigoProductoBuscado = '';
 
   marcas: Marca[] = [];
   tipoUnidades: TipoUnidad[] = [];
+  familias: Familia[] = [];
+  categorias: Categoria[] = [];
+  subclases: Subclase[] = [];
+
+  searchOrNewProductProps: {
+    familia: Familia | null;
+    categoria: Categoria | null;
+    subclase: Subclase | null;
+  } = {
+    familia: null,
+    categoria: null,
+    subclase: null,
+  };
+
+  crearProductoProps: {
+    descripcion: string;
+    marca: Marca | null;
+  } = {
+    descripcion: '',
+    marca: null,
+  };
+
+  visibleModalBuscarProducto = false;
+  visibleModalNuevoProducto = false;
   constructor(
     private pryService: ProyIngSoftService,
     private alerta: AlertaService
   ) {
+    this.getFamiliasCategoriasSubclases();
     this.getProductos();
     this.getMarcas();
     this.getTipoUnidades();
+  }
+
+  toggleModalBuscarProducto() {
+    this.visibleModalBuscarProducto = !this.visibleModalBuscarProducto;
+  }
+
+  toggleModalCrearProducto() {
+    this.visibleModalNuevoProducto = !this.visibleModalNuevoProducto;
   }
 
   getProductos() {
@@ -51,6 +107,102 @@ export class MercadeoView {
     this.pryService.TIPOS_O_FORMAS.getTiposUnidades().subscribe((res) => {
       this.tipoUnidades = res;
     });
+  }
+
+  getFamiliasCategoriasSubclases() {
+    this.pryService.PRODUCTOS.getFamilias().subscribe((res) => {
+      this.familias = res;
+    });
+    this.pryService.PRODUCTOS.getCategorias().subscribe((res) => {
+      this.categorias = res;
+    });
+    this.pryService.PRODUCTOS.getSubclases().subscribe((res) => {
+      this.subclases = res;
+    });
+  }
+
+  crearProducto() {
+    const { descripcion, marca } = this.crearProductoProps;
+    if (!marca) {
+      this.alerta.showWarn('Seleccione una marca');
+      return;
+    }
+    if (descripcion === '') {
+      this.alerta.showWarn('Ingrese una descripción');
+      return;
+    }
+    if (!this.searchOrNewProductProps.subclase) {
+      this.alerta.showWarn('Seleccione una subclase');
+      return;
+    }
+    this.pryService.PRODUCTOS.crearProducto({
+      descripcion,
+      idSubclase: this.searchOrNewProductProps.subclase!.id,
+      idMarca: marca.id,
+    }).subscribe((res) => {
+      if (!res) return;
+      this.codigoProductoBuscado = res.codigoProducto;
+      this.producto = res;
+      this.getProductos();
+      this.alerta.showSuccess('Producto creado');
+    });
+  }
+
+  resetSearchProps() {
+    const categoriaIsInsideFamilia = this.categorias.find(
+      (c) => c.familia.id === this.searchOrNewProductProps.familia?.id
+    );
+    const subclaseIsInsideCategoria = this.subclases.find(
+      (s) => s.categoria.id === this.searchOrNewProductProps.categoria?.id
+    );
+    if (!categoriaIsInsideFamilia) {
+      this.searchOrNewProductProps.categoria = null;
+    }
+
+    if (!subclaseIsInsideCategoria) {
+      this.searchOrNewProductProps.subclase = null;
+    }
+  }
+
+  getCategoriasByFamilia() {
+    if (!this.searchOrNewProductProps.familia) {
+      this.alerta.showWarn('Seleccione una familia');
+      return;
+    }
+    return this.categorias.filter(
+      (c) => c.familia.id === this.searchOrNewProductProps.familia!.id
+    );
+  }
+
+  getSubclasesByCategoria() {
+    if (!this.searchOrNewProductProps.categoria) {
+      this.alerta.showWarn('Seleccione una categoría');
+      return;
+    }
+    return this.subclases.filter(
+      (s) => s.categoria.id === this.searchOrNewProductProps.categoria!.id
+    );
+  }
+
+  getProductosBySubClase() {
+    if (!this.searchOrNewProductProps.subclase) {
+      this.alerta.showWarn('Seleccione una subclase');
+      return;
+    }
+    return this.productos.filter(
+      (p) => p.subclase.id === this.searchOrNewProductProps.subclase!.id
+    );
+  }
+
+  handleClickProductoInSearch(producto: Producto) {
+    this.codigoProductoBuscado = producto.codigoProducto;
+    this.visibleModalBuscarProducto = false;
+    this.selectProducto(producto);
+  }
+
+  selectProducto(producto: Producto) {
+    this.producto = producto;
+    this.newProducto = structuredClone(producto);
   }
 
   nuevoPrecioProducto() {
@@ -111,13 +263,68 @@ export class MercadeoView {
   }
 
   searchProducto() {
-    if (this.codigoProductoBuscado === '') {
-      this.alerta.showWarn('Ingrese un código de producto');
+    if (!this.codigoProductoBuscado.trim()) {
       return;
     }
     this.producto = this.productos.find(
       (p) => p.codigoProducto === this.codigoProductoBuscado
     );
     this.newProducto = structuredClone(this.producto);
+  }
+
+  getFirstNameOfFile(fileList: FileList | null) {
+    if (!fileList) return '';
+
+    const hasFiles = fileList.length > 0;
+    if (!hasFiles) return '';
+
+    const firstFile = fileList[0];
+    return firstFile?.name ?? 'N/A';
+  }
+
+  getPreviewImageFile(file?: File) {
+    if (!file) return '';
+    return URL.createObjectURL(file);
+  }
+
+  async updateImageProducto(file?: File) {
+    if (!file) return this.alerta.showWarn('Seleccione una imagen');
+    if (!this.producto) return this.alerta.showWarn('Seleccione un producto');
+
+    const FORMATOS_VALIDOS = ['image/png', 'image/jpeg', 'image/jpg'];
+
+    if (!FORMATOS_VALIDOS.includes(file.type)) {
+      this.alerta.showWarn('Formato de imagen no válido');
+      return;
+    }
+
+    const fileAsBase64 = await this.fileToBase64(file);
+
+    if (!fileAsBase64 || typeof fileAsBase64 !== 'string') {
+      this.alerta.showWarn('Error al cargar la imagen');
+      return;
+    }
+
+    this.pryService.PRODUCTOS.updateImageProducto(
+      this.producto.id,
+      fileAsBase64
+    ).subscribe(() => {
+      this.alerta.showSuccess('Imagen actualizada');
+    });
+  }
+
+  async fileToBase64(file: File) {
+    return new Promise<string | ArrayBuffer | null>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  getUrlImageProducto(producto: Producto) {
+    return `${IMAGENES_PRODUCTO_URL_BASE}${
+      producto.id
+    }.jpeg?pseudo=${Date.now()}`;
   }
 }

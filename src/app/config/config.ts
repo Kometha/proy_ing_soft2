@@ -18,3 +18,13 @@ export const PERMISOS_MODULOS = {
   compras: [1, 3, 6],
   ventas: [1, 4, 6],
 };
+
+export const IMAGES_DOMAIN = 'https://sclhbbqnazoerbywpwrw.supabase.co';
+export const STORAGE_ROUTE = 'storage/v1/object/public';
+export const PROJECT_BUCKET = 'is_documents_and_files';
+
+export const URL_BASE = `${IMAGES_DOMAIN}/${STORAGE_ROUTE}/${PROJECT_BUCKET}`;
+export const IMAGES_FOLDERS = {
+  empleados: 'empleados',
+  productos: 'productos',
+};

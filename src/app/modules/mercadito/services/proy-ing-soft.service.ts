@@ -10,7 +10,14 @@ import { Permisos } from '../interfaces/permisos';
 import { PERMISOS_MODULOS } from '../../../config/config';
 import { PERMISOS_KEY } from '../../../config/config';
 import { Producto } from '../interfaces/producto';
-import { Marca, Precio, TipoUnidad } from '../interfaces/misc-types';
+import {
+  Categoria,
+  Familia,
+  Marca,
+  Precio,
+  Subclase,
+  TipoUnidad,
+} from '../interfaces/misc-types';
 
 const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
@@ -120,6 +127,76 @@ export class ProyIngSoftService {
         oferta,
       };
       return this.http.put<ApiResponse<Producto>>(url, body, { headers }).pipe(
+        map(({ isSuccess, message }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+        }),
+        catchError(this.handleError)
+      );
+    },
+    crearProducto: (props: {
+      descripcion: string;
+      idSubclase: number;
+      idMarca: number;
+    }) => {
+      const url = `${URL_BASE}/productos`;
+      const body = { ...props };
+      return this.http.post<ApiResponse<Producto>>(url, body, { headers }).pipe(
+        map(({ isSuccess, message, data }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
+    getFamilias: () => {
+      const url = `${URL_BASE}/familias`;
+      return this.http.get<ApiResponse<Familia[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
+    getCategorias: () => {
+      const url = `${URL_BASE}/categorias`;
+      return this.http.get<ApiResponse<Categoria[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
+    getSubclases: () => {
+      const url = `${URL_BASE}/subclases`;
+      return this.http.get<ApiResponse<Subclase[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
+    updateImageProducto: (id: number, base64: string) => {
+      const url = `${URL_BASE}/productos/uploadImage/${id}`;
+      const body = { base64 };
+      return this.http.post<ApiResponse<Producto>>(url, body, { headers }).pipe(
         map(({ isSuccess, message }) => {
           if (!isSuccess) {
             this.alerta.showWarn(message);

@@ -20,15 +20,22 @@
             placeholder="01-02-01-0001"
           >
           </p-inputMask>
-          <small class="text-xsm text-appPrimary-300">
-            Presione
-            <kbd
-              class="px-2 py-1 text-xs text-center items-center font-semibold rounded-lg bg-gray-600 text-gray-100 border-gray-500 mr-1"
-            >
-              F2
-            </kbd>
-            para buscar un producto
-          </small>
+          <span class="mt-2 flex gap-3">
+            <small class="text-xsm text-blue-300">
+              <kbd
+                class="px-2 py-1 text-xs text-center items-center font-semibold rounded-lg bg-blue-600 text-blue-100 border-blue-500 mr-1"
+                >F2</kbd
+              >
+              buscar
+            </small>
+            <small class="text-xsm text-green-300">
+              <kbd
+                class="px-2 py-1 text-xs text-center items-center font-semibold rounded-lg bg-green-600 text-green-100 border-green-500 mr-1"
+                >F8</kbd
+              >
+              crear
+            </small>
+          </span>
         </div>
         @if (newProducto) {
         <!-- Imagen del Producto -->
@@ -36,11 +43,15 @@
           class="w-full rounded-lg flex justify-center items-center flex-col gap-3"
         >
           <img
-            src="https://via.placeholder.com/500"
+            loading="lazy"
+            id="imgProductoHere"
+            [src]="getUrlImageProducto(newProducto)"
+            onerror="this.error = null; this.src = 'https://via.placeholder.com/500'"
             alt="Producto"
-            class="rounded-lg w-full object-cover h-52"
+            class="rounded-lg w-full object-contain h-52"
           />
           <button
+            (click)="opActualizarImagen.toggle($event)"
             class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg hover:bg-white hover:text-appPrimary-700 transition-all duration-300 ease-in-out focus:outline-none"
           >
             Actualizar Imagen
@@ -62,6 +73,32 @@
               />
               <path d="M9 15l3 -3l3 3" />
               <path d="M12 12l0 9" />
+            </svg>
+          </button>
+
+          <button
+            (click)="updateProducto()"
+            class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out focus:outline-none"
+          >
+            Guardar
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-device-floppy"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
+              />
+              <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+              <path d="M14 4l0 4l-6 0l0 -4" />
             </svg>
           </button>
         </div>
@@ -103,7 +140,7 @@
                 for="input-group-1"
                 class="block mb-2 text-sm font-medium text-appPrimary-200"
               >
-                Familia
+                Familia <span class="text-red-300">* No modificable</span>
               </label>
               <input
                 type="text"
@@ -123,7 +160,7 @@
                 for="input-group-1"
                 class="block mb-2 text-sm font-medium text-appPrimary-200"
               >
-                Categoría
+                Categoría <span class="text-red-300">* No modificable</span>
               </label>
               <input
                 type="text"
@@ -143,7 +180,7 @@
                 for="input-group-1"
                 class="block mb-2 text-sm font-medium text-appPrimary-200"
               >
-                Subclase
+                Subclase <span class="text-red-300">* No modificable</span>
               </label>
               <input
                 type="text"
@@ -300,8 +337,8 @@
           </div>
         </fieldset>
         <fieldset>
-          <legend>Lista de precios</legend>
-          <div class="flex flex-col gap-3 mt-1">
+          <legend>Precios e Inventario</legend>
+          <section class="flex flex-col gap-3 mt-1">
             <span class="w-full flex justify-between items-center">
               <span class="block mb-2 text-sm font-medium text-appPrimary-200">
                 Precios por Unidad
@@ -454,7 +491,47 @@
                 </tbody>
               </table>
             </span>
-          </div>
+          </section>
+          <section class="flex flex-col gap-3 mt-3">
+            <span
+              class="w-full block mb-0 text-sm font-medium text-appPrimary-200"
+            >
+              Inventario por tienda
+            </span>
+
+            <!-- ! Tabla de Inventario -->
+            <span>
+              <table class="w-full text-sm bg-appPrimary-700 rounded-2xl">
+                <thead>
+                  <tr class="*:px-6 *:py-3 rounded-t-2xl">
+                    <th class="font-bold text-left">Tienda</th>
+                    <th class="font-bold text-center">Cantidad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (inv of newProducto.inventario; track $index) {
+                  <tr class="*:px-6 *:py-3">
+                    <td>{{ inv.tienda.descripcion }}</td>
+                    <td class="text-center">
+                      <span
+                        class="font-bold
+                        {{
+                          inv.cantidad < 10
+                            ? 'text-red-700'
+                            : inv.cantidad < 50
+                            ? 'text-yellow-800'
+                            : 'text-blue-800'
+                        }}"
+                      >
+                        {{ inv.cantidad }}
+                      </span>
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </span>
+          </section>
         </fieldset>
       </main>
       }
@@ -518,3 +595,315 @@
     </main>
   </ng-template>
 </p-overlayPanel>
+
+<p-overlayPanel #opActualizarImagen>
+  <ng-template pTemplate="content">
+    <main class="flex flex-col gap-3">
+      <div class="flex flex-col items-center justify-center w-full gap-3">
+        @if (fileUpload.files?.[0]) { Archivo seleccionado:
+        {{ getFirstNameOfFile(fileUpload.files) }}
+        }
+        <label
+          for="dropzone-file"
+          class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg cursor-pointer bg-gray-700 border-gray-600 hover:border-gray-500 hover:bg-gray-600"
+        >
+          <div class="flex flex-col items-center justify-center pt-5 pb-6 px-3">
+            <svg
+              class="w-8 h-8 mb-4 text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p class="mb-2 text-sm text-gray-400">
+              <span class="font-semibold">Clic para subir</span>
+              o arrastra y suelta una imagen
+            </p>
+            <p class="text-xs text-gray-400">JPEG, JPG, PNG (MAX. 800x400px)</p>
+          </div>
+          <input id="dropzone-file" #fileUpload type="file" class="hidden" />
+        </label>
+      </div>
+      @if (fileUpload.files?.[0]) {
+      <button
+        (click)="updateImageProducto(fileUpload.files?.[0])"
+        class="bg-appPrimary-400 p-1 rounded-xl flex gap-3 justify-center"
+      >
+        Subir
+      </button>
+      }
+    </main>
+  </ng-template>
+</p-overlayPanel>
+
+<p-dialog [(visible)]="visibleModalBuscarProducto" [modal]="true">
+  <ng-template pTemplate="headless">
+    <main class="bg-appPrimary-900 p-3 rounded-lg">
+      <header class="flex justify-between items-center gap-3">
+        <h1 class="text-lg font-bold text-appPrimary-200">Buscar</h1>
+        <button
+          (click)="toggleModalBuscarProducto()"
+          class="rounded-full border p-1 hover:bg-red-500 hover:border-red-200 transition-all duration-300 ease-in-out focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-4 icon icon-tabler icon-tabler-x"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+          </svg>
+        </button>
+      </header>
+      <section class="mt-3 flex gap-4">
+        <!-- Familia -->
+        <span>
+          <label for="dropdown-familia" class="text-xs"> Familia </label>
+          <p-dropdown
+            id="dropdown-familia"
+            [options]="familias"
+            [(ngModel)]="searchOrNewProductProps.familia"
+            (ngModelChange)="resetSearchProps()"
+            placeholder="Seleccionar"
+            emptyMessage="No hay familias disponibles"
+            appendTo="body"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+          ></p-dropdown>
+        </span>
+        <!-- Categoría -->
+        @if (searchOrNewProductProps.familia) {
+        <span>
+          <label for="dropdown-familia" class="text-xs"> Categoría </label>
+          <p-dropdown
+            id="dropdown-familia"
+            [options]="getCategoriasByFamilia()"
+            [(ngModel)]="searchOrNewProductProps.categoria"
+            (ngModelChange)="resetSearchProps()"
+            placeholder="Seleccionar"
+            emptyMessage="No hay categorías disponibles"
+            appendTo="body"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+          ></p-dropdown>
+        </span>
+        }
+        <!-- Subclase -->
+        @if (searchOrNewProductProps.categoria) {
+        <span>
+          <label for="dropdown-familia" class="text-xs"> SubClase </label>
+          <p-dropdown
+            id="dropdown-familia"
+            [options]="getSubclasesByCategoria()"
+            [(ngModel)]="searchOrNewProductProps.subclase"
+            (ngModelChange)="resetSearchProps()"
+            placeholder="Seleccionar"
+            emptyMessage="No hay subclases disponibles"
+            appendTo="body"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+          ></p-dropdown>
+        </span>
+        }
+      </section>
+      @if (searchOrNewProductProps.subclase) {
+      <section class="mt-3">
+        <h5 class="text-appPrimary-200">Resultados de la búsqueda</h5>
+
+        <table class="w-full text-sm bg-appPrimary-700 rounded-2xl">
+          <thead>
+            <tr class="*:px-6 *:py-3 rounded-t-2xl">
+              <th class="font-bold text-left">Código de Producto</th>
+              <th class="font-bold text-left">Descripción</th>
+              <th class="font-bold text-left">Estado</th>
+              <th class="font-bold text-left">¿Oferta?</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (producto of getProductosBySubClase(); track $index) {
+            <tr
+              class="*:px-6 *:py-3 hover:bg-appPrimary-400 transition-all duration-300 ease-in-out cursor-pointer"
+              (dblclick)="handleClickProductoInSearch(producto)"
+            >
+              <td>{{ producto.codigoProducto }}</td>
+              <td>{{ producto.descripcion }}</td>
+              <td>{{ producto.inhabilitado ? "Inhabilitado" : "Activo" }}</td>
+              <td>{{ producto.oferta ? "En oferta" : "No" }}</td>
+            </tr>
+            } @empty {
+            <tr class="*:px-6 *:py-3">
+              <td colspan="4" class="text-red-200">
+                No se encontraron productos
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </section>
+      }
+    </main>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="visibleModalNuevoProducto" [modal]="true">
+  <ng-template pTemplate="headless">
+    <main class="bg-appPrimary-900 p-3 rounded-lg">
+      <header class="flex justify-between items-center gap-3">
+        <h1 class="text-lg font-bold text-appPrimary-200">Crear</h1>
+        <button
+          (click)="toggleModalCrearProducto()"
+          class="rounded-full border p-1 hover:bg-red-500 hover:border-red-200 transition-all duration-300 ease-in-out focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-4 icon icon-tabler icon-tabler-x"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+          </svg>
+        </button>
+      </header>
+      <section class="mt-3 flex gap-4">
+        <!-- Familia -->
+        <span>
+          <label for="dropdown-familia" class="text-xs"> Familia </label>
+          <p-dropdown
+            id="dropdown-familia"
+            [options]="familias"
+            [(ngModel)]="searchOrNewProductProps.familia"
+            (ngModelChange)="resetSearchProps()"
+            placeholder="Seleccionar"
+            emptyMessage="No hay familias disponibles"
+            appendTo="body"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+          ></p-dropdown>
+        </span>
+        <!-- Categoría -->
+        @if (searchOrNewProductProps.familia) {
+        <span>
+          <label for="dropdown-familia" class="text-xs"> Categoría </label>
+          <p-dropdown
+            id="dropdown-familia"
+            [options]="getCategoriasByFamilia()"
+            [(ngModel)]="searchOrNewProductProps.categoria"
+            (ngModelChange)="resetSearchProps()"
+            placeholder="Seleccionar"
+            emptyMessage="No hay categorías disponibles"
+            appendTo="body"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+          ></p-dropdown>
+        </span>
+        }
+        <!-- Subclase -->
+        @if (searchOrNewProductProps.categoria) {
+        <span>
+          <label for="dropdown-familia" class="text-xs"> SubClase </label>
+          <p-dropdown
+            id="dropdown-familia"
+            [options]="getSubclasesByCategoria()"
+            [(ngModel)]="searchOrNewProductProps.subclase"
+            (ngModelChange)="resetSearchProps()"
+            placeholder="Seleccionar"
+            emptyMessage="No hay subclases disponibles"
+            appendTo="body"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+          ></p-dropdown>
+        </span>
+        }
+      </section>
+      @if (searchOrNewProductProps.subclase) {
+      <section class="mt-3">
+        <h5 class="text-appPrimary-200">Datos básicos</h5>
+        <span class="w-full">
+          <label
+            for="input-group-1"
+            class="block mb-2 text-sm font-medium text-appPrimary-200"
+          >
+            Descripción
+          </label>
+          <textarea
+            type="text"
+            id="input-group-1"
+            [(ngModel)]="crearProductoProps.descripcion"
+            class="w-full resize-none h-20 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
+            placeholder="Sin descripción"
+          ></textarea>
+        </span>
+        <span class="w-full">
+          <label
+            for="input-group-1"
+            class="block mb-2 text-sm font-medium text-appPrimary-200"
+          >
+            Marca
+          </label>
+          <p-dropdown
+            [options]="marcas"
+            [(ngModel)]="crearProductoProps.marca"
+            placeholder="Seleccionar marca"
+            emptyMessage="No hay marcas disponibles"
+            appendTo="body"
+            [filter]="true"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+          ></p-dropdown>
+        </span>
+      </section>
+      <section class="mt-3">
+        <button
+          (click)="crearProducto()"
+          class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out focus:outline-none"
+        >
+          Crear
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-device-floppy"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
+            />
+            <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M14 4l0 4l-6 0l0 -4" />
+          </svg>
+        </button>
+      </section>
+      }
+    </main>
+  </ng-template>
+</p-dialog>
