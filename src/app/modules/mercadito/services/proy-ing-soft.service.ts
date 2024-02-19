@@ -10,7 +10,7 @@ import { Permisos } from '../interfaces/permisos';
 import { PERMISOS_MODULOS } from '../../../config/config';
 import { PERMISOS_KEY } from '../../../config/config';
 import { Producto } from '../interfaces/producto';
-import { Marca } from '../interfaces/misc-types';
+import { Marca, Precio, TipoUnidad } from '../interfaces/misc-types';
 
 const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
@@ -105,15 +105,90 @@ export class ProyIngSoftService {
         catchError(this.handleError)
       );
     },
-  };
-
-  getEmpleados(): Observable<Empleado[]> {
-    return this.http
-      .get<any>(`${URL_BASE}/empleados`, { headers }) // Ajusta any a la estructura real de tu respuesta
-      .pipe(
-        map(response => response.data), // Accede a la propiedad 'data' de la respuesta
+    updateProducto: ({
+      id,
+      descripcion,
+      marca: { id: idMarca },
+      inhabilitado,
+      oferta,
+    }: Producto) => {
+      const url = `${URL_BASE}/productos/${id}`;
+      const body = {
+        descripcion,
+        idMarca,
+        inhabilitado,
+        oferta,
+      };
+      return this.http.put<ApiResponse<Producto>>(url, body, { headers }).pipe(
+        map(({ isSuccess, message }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+        }),
         catchError(this.handleError)
       );
+    },
+  };
+
+  EMPLEADOS = {
+    getEmpleados: (): Observable<Empleado[]> => {
+      return this.http
+        .get<any>(`${URL_BASE}/empleados`, { headers }) // Ajusta any a la estructura real de tu respuesta
+        .pipe(
+          map((response) => response.data), // Accede a la propiedad 'data' de la respuesta
+          catchError(this.handleError)
+        );
+    },
+  };
+
+  PRECIOS = {
+    setPrecioProducto: (
+      idProducto: number,
+      idTipoUnidad: number,
+      precio: number
+    ) => {
+      const url = `${URL_BASE}/precios-productos/${idProducto}`;
+      const body = { idTipoUnidad, precio };
+
+      return this.http.post<ApiResponse<Precio>>(url, body, { headers }).pipe(
+        map(({ isSuccess, message }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+        }),
+        catchError(this.handleError)
+      );
+    },
+    deletePrecio: (id: number) => {
+      const url = `${URL_BASE}/precios-productos/${id}`;
+      return this.http.delete<ApiResponse<Precio>>(url, { headers }).pipe(
+        map(({ isSuccess, message }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+        }),
+        catchError(this.handleError)
+      );
+    },
+  };
+
+  TIPOS_O_FORMAS = {
+    getTiposUnidades: () => {
+      const url = `${URL_BASE}/tipos-unidades`;
+      return this.http.get<ApiResponse<TipoUnidad[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
   };
 
   MARCAS = {

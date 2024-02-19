@@ -10,7 +10,7 @@ export class RecursosHumanosView {
   empleados: Empleado[] = [];
 
   constructor(private proySrv: ProyIngSoftService) {
-    this.proySrv.getEmpleados().subscribe((res) => {
+    this.proySrv.EMPLEADOS.getEmpleados().subscribe((res) => {
       this.empleados = res;
     });
   }

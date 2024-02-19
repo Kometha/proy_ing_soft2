@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputMaskModule } from 'primeng/inputmask';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -18,6 +19,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/carousel';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipModule } from 'primeng/chip';
@@ -53,6 +55,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     DropdownModule,
     AutoFocusModule,
     InputTextModule,
+    InputNumberModule,
     InputMaskModule,
     ProgressBarModule,
     ProgressSpinnerModule,
@@ -90,7 +93,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     ToolbarModule,
     TooltipModule,
     FormsModule,
-    InputSwitchModule
+    InputSwitchModule,
+    OverlayPanelModule,
   ],
 })
 export class PrimeNgModule {
