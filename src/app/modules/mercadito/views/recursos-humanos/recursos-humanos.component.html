@@ -7,22 +7,34 @@
       <div
         class="w-full rounded-lg flex justify-center items-center flex-col gap-3"
       >
+        @if (!newEmpleado.id || nombreEmpleadoBuscado === '') {
         <img
-          src="https://via.placeholder.com/800"
+          src="https://i.ibb.co/BCGVdCJ/800x800-1.png"
           alt="Usuario"
           class="rounded-lg w-full object-cover h-96"
         />
+
+        }@else {
+        <img
+          [src]="getUrlImageEmpleado(newEmpleado)"
+          alt="Usuario"
+          class="rounded-lg w-full object-cover h-96"
+        />
+        }
       </div>
-      <h1 class="text-white text-xl p-3">[  Nombre, Apellido  ]</h1>
+      <h1 class="text-white text-xl p-3">{{ nombreCompleto }}</h1>
       <label class="block">
         <input
-                type="text"
-                id="input-group-1"
-                [disabled]="true"
-                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 w-9/12	 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
-              />
-            </label>
-            <small class="text-white">Busca un empleado por su código o registra uno*</small>
+          [(ngModel)]="nombreEmpleadoBuscado"
+          (ngModelChange)="buscarEmpleado()"
+          type="text"
+          id="input-group-1"
+          class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 w-9/12 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
+        />
+      </label>
+      <small class="text-white"
+        >Busca un empleado por su código o registra uno*</small
+      >
     </div>
     <section class="col-start-4 col-end-12 flex flex-col gap-3">
       <header class="text-lg text-appPrimary-200">Datos del empleado</header>
@@ -37,11 +49,12 @@
                 Nombres
               </label>
               <input
+                name="nombre"
+                [(ngModel)]="newEmpleado.nombre"
                 type="text"
                 id="input-group-1"
-                [disabled]="true"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
-                placeholder="N/A"
+                placeholder="David Hernan"
               />
             </span>
             <span class="w-full">
@@ -52,11 +65,12 @@
                 Apellidos
               </label>
               <input
+                name="apellido"
+                [(ngModel)]="newEmpleado.apellido"
                 type="text"
                 id="input-group-1"
-                [disabled]="true"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
-                placeholder="N/A"
+                placeholder="Gallo Hernandez"
               />
             </span>
             <span class="w-full">
@@ -67,11 +81,28 @@
                 Email
               </label>
               <input
-                type="text"
+                name="email"
+                [(ngModel)]="newEmpleado.email"
+                type="email"
                 id="input-group-1"
-                [disabled]="true"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
-                placeholder="N/A"
+                placeholder="estudiante@ceutec.edu"
+              />
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
+                Contraseña
+              </label>
+              <input
+                name="password"
+                [(ngModel)]="newEmpleado.password"
+                type="password"
+                id="input-group-1"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="*********"
               />
             </span>
             <span class="w-full">
@@ -81,13 +112,13 @@
               >
                 Telefono
               </label>
-              <input
-                type="text"
-                id="input-group-1"
-                [disabled]="true"
-                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
-                placeholder="N/A"
-              />
+              <p-inputMask
+                mask="9999-9999"
+                [(ngModel)]="newEmpleado.telefono"
+                styleClass="bg-appPrimary-800 w-full rounded-lg p-2 border border-gray-300 outline-none hover:ring-2 hover:ring-appPrimary-400 focus:ring-2 focus:ring-appPrimary-300 transition-all duration-300 ease-in-out"
+                placeholder="9561-9455"
+              >
+              </p-inputMask>
             </span>
             <span class="w-full">
               <label
@@ -97,9 +128,11 @@
                 Salario
               </label>
               <input
-                type="text"
+                name="salario"
+                [min]="9000"
+                [(ngModel)]="newEmpleado.salario"
+                type="number"
                 id="input-group-1"
-                [disabled]="true"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="18000.00"
               />
@@ -112,6 +145,8 @@
                 Observaciones
               </label>
               <textarea
+                name="observaciones"
+                [(ngModel)]="newEmpleado.observaciones"
                 type="text"
                 id="input-group-1"
                 class="w-full resize-none h-20 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
@@ -130,9 +165,10 @@
                 Alias
               </label>
               <input
+                name="alias"
+                [(ngModel)]="newEmpleado.alias"
                 type="text"
                 id="input-group-1"
-                [disabled]="true"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="crywhat, dgallo, nlopez..."
               />
@@ -145,8 +181,11 @@
                 Puesto
               </label>
               <p-dropdown
+                optionValue="id"
+                [(ngModel)]="newEmpleado.idPuesto"
+                [options]="puestos"
                 placeholder="Seleccionar un puesto"
-                emptyMessage="No hay marcas disponibles"
+                emptyMessage="No hay puestos disponibles"
                 appendTo="body"
                 [filter]="true"
                 styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
@@ -161,8 +200,11 @@
                 Genero
               </label>
               <p-dropdown
+                optionValue="id"
+                [(ngModel)]="newEmpleado.idGenero"
+                [options]="generos"
                 placeholder="Seleccionar un género"
-                emptyMessage="No hay marcas disponibles"
+                emptyMessage="No hay género disponible"
                 appendTo="body"
                 [filter]="true"
                 styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
@@ -177,8 +219,11 @@
                 Tipo Pago
               </label>
               <p-dropdown
+                optionValue="id"
+                [(ngModel)]="newEmpleado.idTipoPago"
+                [options]="tipoPago"
                 placeholder="Seleccionar un tipo de pago"
-                emptyMessage="No hay marcas disponibles"
+                emptyMessage="No hay tipos de pago disponibles"
                 appendTo="body"
                 [filter]="true"
                 styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
@@ -192,20 +237,86 @@
               >
                 Inhabilitado
               </label>
-              <p-inputSwitch></p-inputSwitch>
-
-
+              <button
+                class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg {{
+                  newEmpleado.inhabilitado
+                    ? 'hover:bg-green-600'
+                    : 'hover:bg-red-600'
+                }} text-white transition-all duration-300 ease-in-out focus:outline-none"
+              >
+                {{ newEmpleado.inhabilitado ? "Habilitar" : "Inhabilitar" }}
+                @if (!newEmpleado.inhabilitado) {
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-ban"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                  <path d="M5.7 5.7l12.6 12.6" />
+                </svg>
+                } @else {
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-brand-gumroad"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M21 12a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z" />
+                  <path d="M13.5 13h2.5v3" />
+                  <path
+                    d="M15.024 9.382a4 4 0 1 0 -3.024 6.618c1.862 0 2.554 -1.278 3 -3"
+                  />
+                </svg>
+                }
+              </button>
             </span>
           </div>
         </fieldset>
       </main>
     </section>
   </div>
-  <footer class="flex items-center justify-end ">
-
-    <button class="flex justify-center  bg-white py-2 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none">
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-floppy" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
-      GUARDAR
+  <footer class="flex items-center justify-end">
+    <button
+      (click)="guardarEmpleado()"
+      pButton
+      type="button"
+      label="Guardar"
+      class="flex justify-center gap-3 border py-2 px-4 hover:bg-green-600 transition-all duration-300 rounded-lg ease-in-out focus:outline-none"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon icon-tabler icon-tabler-device-floppy"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path
+          d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
+        />
+        <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+        <path d="M14 4l0 4l-6 0l0 -4" />
+      </svg>
     </button>
   </footer>
 </main>

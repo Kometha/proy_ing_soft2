@@ -12,6 +12,11 @@ export interface Empleado {
   inhabilitado: boolean;
   observaciones: string;
   puesto: Puesto;
+  idPuesto: number;
   genero: Genero;
+  idGenero: number;
+  password?: string;
   tipoPago: TipoPago;
+  idTipoPago: number;
+  observaciones?: string;
 }

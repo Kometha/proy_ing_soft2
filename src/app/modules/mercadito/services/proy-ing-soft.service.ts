@@ -13,9 +13,12 @@ import { Producto } from '../interfaces/producto';
 import {
   Categoria,
   Familia,
+  Genero,
   Marca,
   Precio,
+  Puesto,
   Subclase,
+  TipoPago,
   TipoUnidad,
 } from '../interfaces/misc-types';
 
@@ -217,6 +220,24 @@ export class ProyIngSoftService {
           catchError(this.handleError)
         );
     },
+    getGeneros: () => {
+      return this.http
+        .get<ApiResponse<Genero[]>>(`${URL_BASE}/generos`, { headers }) // Ajusta any a la estructura real de tu respuesta
+        .pipe(
+          map((response) => response.data), // Accede a la propiedad 'data' de la respuesta
+          catchError(this.handleError)
+        );
+    },
+    crearEmpleado: (empleado: Empleado) => {
+      return this.http
+        .post<ApiResponse<Empleado>>(`${URL_BASE}/empleados`, empleado, {
+          headers,
+        })
+        .pipe(
+          map((response) => response.data), // Accede a la propiedad 'data' de la respuesta
+          catchError(this.handleError)
+        );
+    },
   };
 
   PRECIOS = {
@@ -266,12 +287,41 @@ export class ProyIngSoftService {
         catchError(this.handleError)
       );
     },
+    getTiposPago: () => {
+      const url = `${URL_BASE}/tipo-pago`;
+      return this.http.get<ApiResponse<TipoPago[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
   };
 
   MARCAS = {
     getMarcas: () => {
       const url = `${URL_BASE}/marcas`;
       return this.http.get<ApiResponse<Marca[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
+  };
+
+  PUESTOS = {
+    getPuestos: () => {
+      const url = `${URL_BASE}/puestos`;
+      return this.http.get<ApiResponse<Puesto[]>>(url, { headers }).pipe(
         map(({ message, data }) => {
           if (!data) {
             this.alerta.showWarn(message);

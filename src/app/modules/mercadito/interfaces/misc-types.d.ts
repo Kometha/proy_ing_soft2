@@ -53,3 +53,15 @@ export interface Puesto {
   createdAt: Date;
   descripcion: string;
 }
+
+export interface Genero{
+  id: number;
+  createdAt: Date;
+  descripcion: string;
+}
+
+export interface TipoPago{
+  id: number;
+  createdAt: Date;
+  descripcion: string;
+}
