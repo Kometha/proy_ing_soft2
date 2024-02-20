@@ -11,6 +11,7 @@ export interface Marca extends GeneralData {}
 export interface Tienda extends GeneralData {}
 export interface TipoUnidad extends GeneralData {
   permiteDecimales: boolean;
+  abreviacion: string;
 }
 
 export interface Inventario {

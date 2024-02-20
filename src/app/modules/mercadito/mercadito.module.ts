@@ -12,6 +12,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ComprasView } from './views/compras/compras.component';
 import { MercadeoView } from './views/mercadeo/mercadeo.component';
 import { VentasView } from './views/ventas/ventas.component';
+import { CardProductoComponent } from './views/ventas/components/card-producto/card-producto.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { VentasView } from './views/ventas/ventas.component';
     // ! Components
     HeaderComponent,
     ModuleCardComponent,
+    CardProductoComponent,
   ],
   imports: [CommonModule, MercaditoRoutingModule, PrimeNgModule, RouterModule],
 })

@@ -1,0 +1,50 @@
+<article
+  class="flex flex-col gap-2 p-3 rounded-lg bg-appPrimary-700 hover:bg-appPrimary-500 transition-all duration-300 ease-in-out cursor-pointer h-full"
+>
+  <header class="flex flex-1">
+    <img
+      loading="lazy"
+      id="imgProductoHere"
+      [src]="getUrlImageProducto(producto)"
+      onerror="this.error = null; this.src = 'https://via.placeholder.com/500'"
+      [alt]="producto.descripcion"
+      class="rounded-lg w-full object-contain h-24"
+    />
+  </header>
+  <section class="text-center text-balance">
+    <h1 class="text-appPrimary-200 font-bold text-lg">
+      {{ producto.descripcion }}
+    </h1>
+    <small class="text-appPrimary-100 font-semibold">
+      {{ producto.marca.descripcion }}
+    </small>
+  </section>
+  <footer class="flex justify-between items-end">
+    <small class="text-appPrimary-100">
+      {{ getPreciosProducto(producto) }}
+    </small>
+    <button
+      class="bg-appPrimary-300 text-appPrimary-700 font-bold px-3 py-1 rounded-lg hover:bg-appPrimary-800 hover:text-appPrimary-300 transition-all duration-300 ease-in-out"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon icon-tabler icon-tabler-shopping-cart-plus"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+        <path d="M12.5 17h-6.5v-14h-2" />
+        <path d="M6 5l14 1l-.86 6.017m-2.64 .983h-10.5" />
+        <path d="M16 19h6" />
+        <path d="M19 16v6" />
+      </svg>
+    </button>
+  </footer>
+</article>

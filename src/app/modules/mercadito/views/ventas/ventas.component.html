@@ -1,1 +1,83 @@
 <app-header colorClass="green"> Ventas </app-header>
+<main class="p-5">
+  <header class="flex justify-between items-center gap-5">
+    <h1>Tienda: Galope <small> (La Quezada) </small></h1>
+    <input
+      type="text"
+      [(ngModel)]="searchInput"
+      (ngModelChange)="searchProductos()"
+      class="bg-appPrimary-700 text-appPrimary-200 focus:bg-appPrimary-500 focus:text-white focus:ring-2 focus:ring-appPrimary-100 hover:bg-appPrimary-600 font-semibold p-2 rounded-lg w-full outline-none transition-all duration-300 ease-in-out"
+      placeholder="Buscar producto"
+    />
+    <span class="bg-appPrimary-500 rounded-full p-2">
+      <!-- Carrito -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon icon-tabler icon-tabler-shopping-cart"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+        <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+        <path d="M17 17h-11v-14h-2" />
+        <path d="M6 5l14 1l-1 7h-13" />
+      </svg>
+    </span>
+  </header>
+  <section class="grid p-2 grid-cols-12 mt-3 max-md:grid-cols-1">
+    <!-- ! NavBar Familias -->
+    <div class="col-start-1 col-end-3 max-md:col-start-1 max-md:col-end-1">
+      <header>
+        <h1 class="text-appPrimary-200 font-bold text-2xl">Familias</h1>
+      </header>
+      <ul class="mt-3 gap-3 w-full">
+        @for (familia of productosView; track $index) {
+        <li
+          (click)="selectView(familia)"
+          class="w-full  p-2 rounded-lg font-bold mb-2 hover:bg-appPrimary-500 transition-all duration-300 ease-in-out cursor-pointer {{
+            viewSeleccionada?.familia === familia.familia
+              ? 'text-appPrimary-700 bg-appPrimary-300'
+              : 'text-appPrimary-200 bg-appPrimary-700'
+          }}"
+        >
+          {{ familia.familia }}
+        </li>
+        }
+      </ul>
+    </div>
+    <div
+      class="col-start-4 col-end-12 max-md:col-start-1 max-md:col-end-1 flex flex-col gap-5"
+    >
+      <!-- ! Categorías -->
+      @for (categoria of viewSeleccionada?.categorias ?? []; track $index) {
+      <!-- ! Validación -->
+      @if (categoria.productos.length > 0) {
+      <article class="flex flex-col gap-3">
+        <header>
+          <h1 class="text-appPrimary-100 font-semibold text-xl">
+            {{ categoria.categoria }}
+          </h1>
+          <small>
+            <strong>Incluye:</strong> {{ categoria.listaSubclases.join(", ") }}
+          </small>
+        </header>
+        <!-- ! Lista de Productos -->
+        <section
+          class="grid grid-flow-row grid-cols-[repeat(auto-fill,minmax(200px,1fr))] grid-rows-auto gap-4"
+        >
+          @for (producto of categoria.productos; track $index) {
+          <app-card-producto [producto]="producto"></app-card-producto>
+          }
+        </section>
+      </article>
+      } }
+    </div>
+  </section>
+</main>
