@@ -13,6 +13,7 @@ import { ComprasView } from './views/compras/compras.component';
 import { MercadeoView } from './views/mercadeo/mercadeo.component';
 import { VentasView } from './views/ventas/ventas.component';
 import { CardProductoComponent } from './views/ventas/components/card-producto/card-producto.component';
+import { CardProductoCarritoComponent } from './views/ventas/components/card-producto-carrito/card-producto-carrito.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { CardProductoComponent } from './views/ventas/components/card-producto/c
     HeaderComponent,
     ModuleCardComponent,
     CardProductoComponent,
+    CardProductoCarritoComponent,
   ],
   imports: [CommonModule, MercaditoRoutingModule, PrimeNgModule, RouterModule],
 })

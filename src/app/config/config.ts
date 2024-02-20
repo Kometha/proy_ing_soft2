@@ -10,6 +10,7 @@ export const WEB_SERVICE = environment.host;
 
 export const DATA_USER_KEY = 'usuario';
 export const PERMISOS_KEY = 'permisos';
+export const CART_KEY = 'cart';
 
 export const PERMISOS_MODULOS = {
   dashboard: null,

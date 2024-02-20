@@ -24,6 +24,7 @@
       {{ getPreciosProducto(producto) }}
     </small>
     <button
+      (click)="handleClickAddToCart()"
       class="bg-appPrimary-300 text-appPrimary-700 font-bold px-3 py-1 rounded-lg hover:bg-appPrimary-800 hover:text-appPrimary-300 transition-all duration-300 ease-in-out"
     >
       <svg

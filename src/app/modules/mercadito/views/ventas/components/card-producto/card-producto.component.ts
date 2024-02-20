@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IMAGES_FOLDERS, URL_BASE } from '../../../../../../config/config';
 import { Producto } from '../../../../interfaces/producto';
 
@@ -10,6 +10,7 @@ const IMAGENES_PRODUCTO_URL_BASE = `${URL_BASE}/${IMAGES_FOLDERS.productos}/`;
 })
 export class CardProductoComponent {
   @Input() producto!: Producto;
+  @Output() clickAddToCart = new EventEmitter<Producto>();
 
   getUrlImageProducto(producto: Producto) {
     return `${IMAGENES_PRODUCTO_URL_BASE}${
@@ -25,5 +26,9 @@ export class CardProductoComponent {
     }
 
     return `N/A`;
+  }
+
+  handleClickAddToCart() {
+    this.clickAddToCart.emit(this.producto);
   }
 }

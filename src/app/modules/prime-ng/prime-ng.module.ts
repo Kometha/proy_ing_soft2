@@ -20,6 +20,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/carousel';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { SidebarModule } from 'primeng/sidebar';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipModule } from 'primeng/chip';
@@ -48,7 +49,6 @@ import { PrimeNGConfig } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
 
-
 @NgModule({
   exports: [
     ButtonModule,
@@ -59,6 +59,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     InputMaskModule,
     ProgressBarModule,
     ProgressSpinnerModule,
+    SidebarModule,
     TableModule,
     ToastModule,
     AccordionModule,

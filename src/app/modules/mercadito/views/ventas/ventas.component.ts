@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { Producto, ProductoView } from '../../interfaces/producto';
+import {
+  Producto,
+  ProductoCarrito,
+  ProductoView,
+} from '../../interfaces/producto';
 import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
+import { TipoUnidad } from '../../interfaces/misc-types';
+import { CART_KEY } from '../../../../config/config';
 
 @Component({
   selector: 'ventas-view',
@@ -13,8 +19,11 @@ export class VentasView {
   viewSeleccionada?: ProductoView;
   viewSeleccionadaBkp?: ProductoView;
   searchInput = '';
+  visibleSideBarCarrito = false;
+  productosCarrito: ProductoCarrito[] = [];
   constructor(private pryIngSoftService: ProyIngSoftService) {
     this.getProductos();
+    this.restoreCarrito();
   }
 
   getProductos() {
@@ -135,5 +144,55 @@ export class VentasView {
     });
 
     return productosAgrupados;
+  }
+
+  restoreCarrito() {
+    const carrito = localStorage.getItem(CART_KEY);
+    if (!carrito) return;
+
+    this.productosCarrito = JSON.parse(carrito);
+  }
+
+  setCarrito() {
+    localStorage.setItem(CART_KEY, JSON.stringify(this.productosCarrito));
+  }
+
+  addProductoToCarrito(producto: Producto) {
+    const [firstPrecio] = producto.precios;
+    if (!firstPrecio) return;
+
+    const { tipoUnidad } = firstPrecio;
+    const productoCarrito: ProductoCarrito = {
+      producto,
+      cantidad: 1,
+      tipoUnidad,
+    };
+
+    // ! Si el producto ya está en el carrito, aumentamos la cantidad
+    const productoIndex = this.productosCarrito.findIndex(
+      (p) => p.producto.id === producto.id
+    );
+
+    if (productoIndex !== -1) {
+      this.productosCarrito[productoIndex].cantidad++;
+      return;
+    }
+
+    this.productosCarrito.push(productoCarrito);
+
+    this.setCarrito();
+
+    this.visibleSideBarCarrito = true;
+  }
+
+  removeProductoFromCarrito(producto: ProductoCarrito) {
+    const productoIndex = this.productosCarrito.findIndex(
+      (p) => p.producto.id === producto.producto.id
+    );
+
+    if (productoIndex === -1) return;
+    this.productosCarrito.splice(productoIndex, 1);
+
+    this.setCarrito();
   }
 }

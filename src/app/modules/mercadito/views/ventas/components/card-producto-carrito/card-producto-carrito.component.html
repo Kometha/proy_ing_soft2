@@ -1,0 +1,87 @@
+<article class="flex flex-col gap-3 bg-appPrimary-700 p-2 rounded-lg">
+  <header class="flex justify-between items-center peer">
+    <h3>
+      {{ productoCarrito.producto.descripcion }}
+    </h3>
+    <button
+      (click)="handleClickRemoveFromCart()"
+      class="bg-red-600 rounded-lg p-1 justify-center items-center hover:peer-[opacity-0]"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon icon-tabler icon-tabler-trash"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M4 7l16 0" />
+        <path d="M10 11l0 6" />
+        <path d="M14 11l0 6" />
+        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+      </svg>
+    </button>
+  </header>
+  <div class="flex flex-col gap-2">
+    <div class="relative w-full">
+      <div
+        class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-hash"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M5 9l14 0" />
+          <path d="M5 15l14 0" />
+          <path d="M11 4l-4 16" />
+          <path d="M17 4l-4 16" />
+        </svg>
+      </div>
+      <input
+        type="number"
+        [step]="productoCarrito.tipoUnidad.permiteDecimales ? '0.1' : '1'"
+        [(ngModel)]="productoCarrito.cantidad"
+        class="bg-appPrimary-80 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg block w-full ps-10 p-2.5 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
+        placeholder="0"
+      />
+    </div>
+    <p-dropdown
+      [options]="getTiposUnidad()"
+      [(ngModel)]="productoCarrito.tipoUnidad"
+      placeholder="Seleccionar"
+      emptyMessage="No hay tipos de unidad disponibles"
+      appendTo="body"
+      styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+      optionLabel="descripcion"
+    ></p-dropdown>
+    <span class="flex justify-between items-center mb-3">
+      <span class="flex flex-col">
+        <strong> Precio Unitario: </strong>
+        <sub>
+          {{ getPrecioByTipoUnidad() }}
+        </sub>
+      </span>
+      <span class="flex flex-col">
+        <strong> Subtotal: </strong>
+        <sub>
+          {{ getSubtotal() }}
+        </sub>
+      </span>
+    </span>
+  </div>
+</article>
