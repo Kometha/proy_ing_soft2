@@ -12,3 +12,12 @@ export interface Producto {
   inventario: Inventario[];
   precios: Precio[];
 }
+
+export interface ProductoView {
+  familia: string;
+  categorias: {
+    categoria: string;
+    listaSubclases: string[];
+    productos: Producto[];
+  }[];
+}
