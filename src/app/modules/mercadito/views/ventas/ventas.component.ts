@@ -195,4 +195,16 @@ export class VentasView {
 
     this.setCarrito();
   }
+
+  getTotalCarrito() {
+    return this.productosCarrito.reduce((acc, producto) => {
+      const { precio } = producto.producto.precios.find(
+        (p) => p.tipoUnidad === producto.tipoUnidad
+      ) ?? { precio: 0 };
+
+      return acc + precio * producto.cantidad;
+    }, 0);
+  }
+
+  handleClickCheckout() {}
 }
