@@ -238,6 +238,47 @@ export class ProyIngSoftService {
           catchError(this.handleError)
         );
     },
+    updateEmpleado: ({
+      id,
+      createdAt,
+      nombre,
+      apellido,
+      email,
+      telefono,
+      alias,
+      salario,
+      inhabilitado,
+      observaciones,
+      puesto: { id: idPuesto },
+      genero: { id: idGenero },
+      tipoPago: { id: idTipoPago },
+
+    }: Empleado) => {
+      const url = `${URL_BASE}/empleados/${id}`;
+      const body = {
+        createdAt,
+        nombre,
+        apellido,
+        email,
+        telefono,
+        alias,
+        salario,
+        inhabilitado,
+        observaciones,
+        idPuesto,
+        idGenero,
+        idTipoPago,
+      };
+      return this.http.put<ApiResponse<Producto>>(url, body, { headers }).pipe(
+        map(({ isSuccess, message }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+        }),
+        catchError(this.handleError)
+      );
+    },
   };
 
   PRECIOS = {

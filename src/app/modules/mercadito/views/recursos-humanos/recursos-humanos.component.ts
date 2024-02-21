@@ -3,6 +3,7 @@ import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
 import { Empleado } from '../../interfaces/empleado';
 import { Genero, Puesto, TipoPago } from '../../interfaces/misc-types';
 import { URL_BASE, IMAGES_FOLDERS } from '../../../../config/config';
+import { AlertaService } from '../../../../services/alertas/alerta.service';
 
 const IMAGENES_EMPLEADO_URL_BASE = `${URL_BASE}/${IMAGES_FOLDERS.empleados}/`;
 
@@ -22,7 +23,7 @@ export class RecursosHumanosView {
   tipoPago: TipoPago[] = [];
   nombreCompleto!: string;
 
-  nombreEmpleadoBuscado = '';
+  aliasEmpleadoBuscado = '';
 
   newEmpleado: Empleado = {
     nombre: '',
@@ -34,12 +35,14 @@ export class RecursosHumanosView {
     salario: 9000,
     observaciones: '',
     idPuesto: 0, // Inicializar como necesario
+    idGenero: 0, // Inicializar como necesario
+    idTipoPago: 0, // Inicializar como necesario
   } as Empleado;
 
 
 
 
-  constructor(private proySrv: ProyIngSoftService) {
+  constructor(private proySrv: ProyIngSoftService, private alerta: AlertaService) {
     this.obtenerEmpleados();
     this.obtenerPuestos();
     this.obtenerGeneros();
@@ -77,17 +80,38 @@ export class RecursosHumanosView {
   }
 
   buscarEmpleado() {
-    if (!this.nombreEmpleadoBuscado.trim()) {
+    if (!this.aliasEmpleadoBuscado.trim()) {
       return;
     }
 
-    this.empleado = this.empleados.find((p) => p.nombre === this.nombreEmpleadoBuscado);
+    this.empleado = this.empleados.find((p) => p.alias === this.aliasEmpleadoBuscado);
 
     if (this.empleado) {
       this.newEmpleado = structuredClone(this.empleado);
       this.nombreCompleto = this.newEmpleado.nombre + ' ' + this.newEmpleado.apellido;
     }
     console.log(this.empleado);
+    if( this.empleado?.puesto){
+      this.newEmpleado.idTipoPago = this.empleado?.tipoPago.id;
+      this.newEmpleado.idPuesto = this.empleado?.puesto.id;
+      this.newEmpleado.idGenero = this.empleado?.genero.id;
+    }
+
+  }
+
+  handleClickInhabilitado() {
+    this.newEmpleado!.inhabilitado = !this.newEmpleado!.inhabilitado;
+    this.updateEmpleados();
+  }
+
+  updateEmpleados() {
+    this.proySrv.EMPLEADOS.updateEmpleado(this.newEmpleado!).subscribe(
+      () => {
+        this.alerta.showSuccess('Empleado actualizado!');
+        this.obtenerEmpleados();
+
+      }
+    );
   }
 
   getUrlImageEmpleado(empleado: Empleado) {
