@@ -5,8 +5,8 @@ import {
   ProductoView,
 } from '../../interfaces/producto';
 import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
-import { TipoUnidad } from '../../interfaces/misc-types';
 import { CART_KEY } from '../../../../config/config';
+import { Cliente } from '../../interfaces/cliente';
 
 @Component({
   selector: 'ventas-view',
@@ -21,8 +21,25 @@ export class VentasView {
   searchInput = '';
   visibleSideBarCarrito = false;
   productosCarrito: ProductoCarrito[] = [];
+
+  clientes: Cliente[] = [];
+  inputSearchCliente = '';
+  clienteEncontrado?: Cliente;
+  inputsClienteDisabled = true;
+  nuevoCliente: Cliente = {
+    id: 0,
+    createdAt: new Date(),
+    dni: '',
+    nombreCompleto: '',
+    telefono: '',
+  };
+
+  visibleModalFacturar = true;
+  visibleModalCliente = false;
+
   constructor(private pryIngSoftService: ProyIngSoftService) {
     this.getProductos();
+    this.getClientes();
     this.restoreCarrito();
   }
 
@@ -35,6 +52,12 @@ export class VentasView {
       this.productosView = this.productosViewOriginal;
       const [firstView] = this.productosView;
       if (firstView) this.selectView(firstView);
+    });
+  }
+
+  getClientes() {
+    this.pryIngSoftService.CLIENTES.getClientes().subscribe((response) => {
+      this.clientes = response;
     });
   }
 
@@ -206,5 +229,33 @@ export class VentasView {
     }, 0);
   }
 
-  handleClickCheckout() {}
+  handleClickCheckout() {
+    this.visibleSideBarCarrito = false;
+    this.visibleModalFacturar = true;
+  }
+
+  searchCliente() {
+    // La mascara es: 0000-0000-00000
+    // 15 caracteres
+    // 4-4-5
+    // Reemplazar los guiones y los guiones_bajos
+    const str = this.inputSearchCliente.trim().toLowerCase();
+    const strWithOutMask = str.replace(/-|_/g, '');
+
+    if (!strWithOutMask) return;
+
+    this.clienteEncontrado = this.clientes.find(
+      (cliente) => cliente.dni === str
+    );
+
+    this.inputsClienteDisabled = true;
+
+    if (strWithOutMask.length === 13 && !this.clienteEncontrado) {
+      this.inputsClienteDisabled = false;
+    }
+  }
+
+  handleClickCreateCliente() {
+    if (this.inputSearchCliente.length !== 15) return;
+  }
 }

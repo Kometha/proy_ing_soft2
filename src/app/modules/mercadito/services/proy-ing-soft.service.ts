@@ -21,6 +21,7 @@ import {
   TipoPago,
   TipoUnidad,
 } from '../interfaces/misc-types';
+import { Cliente } from '../interfaces/cliente';
 
 const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
@@ -372,6 +373,37 @@ export class ProyIngSoftService {
         }),
         catchError(this.handleError)
       );
+    },
+  };
+
+  CLIENTES = {
+    getClientes: () => {
+      const url = `${URL_BASE}/clientes`;
+      return this.http.get<ApiResponse<Cliente[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
+    crearCliente: (cliente: Cliente) => {
+      const url = `${URL_BASE}/clientes`;
+      return this.http
+        .post<ApiResponse<Cliente>>(url, cliente, { headers })
+        .pipe(
+          map(({ isSuccess, message, data }) => {
+            if (!isSuccess) {
+              this.alerta.showWarn(message);
+              return;
+            }
+            return data;
+          }),
+          catchError(this.handleError)
+        );
     },
   };
 }
