@@ -34,6 +34,9 @@ export class RecursosHumanosView {
     alias: '',
     salario: 9000,
     observaciones: '',
+    puesto: {},
+    genero: {},
+    tipoPago: {},
     idPuesto: 0, // Inicializar como necesario
     idGenero: 0, // Inicializar como necesario
     idTipoPago: 0, // Inicializar como necesario
@@ -92,9 +95,9 @@ export class RecursosHumanosView {
     }
     console.log(this.empleado);
     if( this.empleado?.puesto){
-      this.newEmpleado.idTipoPago = this.empleado?.tipoPago.id;
-      this.newEmpleado.idPuesto = this.empleado?.puesto.id;
-      this.newEmpleado.idGenero = this.empleado?.genero.id;
+      this.newEmpleado.tipoPago.id = this.empleado?.tipoPago.id;
+      this.newEmpleado.puesto.id = this.empleado?.puesto.id;
+      this.newEmpleado.genero.id = this.empleado?.genero.id;
     }
 
   }
