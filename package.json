@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "dev": "npm run start",
     "start": "ng serve",
     "build-netlify": "npm i && npm run build",
     "build": "ng build --configuration production",
