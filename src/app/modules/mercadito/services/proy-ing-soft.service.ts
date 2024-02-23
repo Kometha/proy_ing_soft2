@@ -270,7 +270,20 @@ export class ProyIngSoftService {
         idGenero,
         idTipoPago,
       };
-      return this.http.put<ApiResponse<Producto>>(url, body, { headers }).pipe(
+      return this.http.put<ApiResponse<Empleado>>(url, body, { headers }).pipe(
+        map(({ isSuccess, message }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+        }),
+        catchError(this.handleError)
+      );
+    },
+    updateImageEmpleado: (id: number, base64: string) => {
+      const url = `${URL_BASE}/empleados/uploadImage/${id}`;
+      const body = { base64 };
+      return this.http.post<ApiResponse<Empleado>>(url, body, { headers }).pipe(
         map(({ isSuccess, message }) => {
           if (!isSuccess) {
             this.alerta.showWarn(message);

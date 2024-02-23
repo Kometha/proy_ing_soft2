@@ -12,9 +12,7 @@ const IMAGENES_EMPLEADO_URL_BASE = `${URL_BASE}/${IMAGES_FOLDERS.empleados}/`;
   templateUrl: './recursos-humanos.component.html',
 })
 export class RecursosHumanosView {
-
   IMAGENES_EMPLEADO_URL_BASE = IMAGENES_EMPLEADO_URL_BASE;
-
 
   empleados: Empleado[] = [];
   empleado?: Empleado;
@@ -42,10 +40,10 @@ export class RecursosHumanosView {
     idTipoPago: 0, // Inicializar como necesario
   } as Empleado;
 
-
-
-
-  constructor(private proySrv: ProyIngSoftService, private alerta: AlertaService) {
+  constructor(
+    private proySrv: ProyIngSoftService,
+    private alerta: AlertaService
+  ) {
     this.obtenerEmpleados();
     this.obtenerPuestos();
     this.obtenerGeneros();
@@ -56,7 +54,6 @@ export class RecursosHumanosView {
     this.proySrv.EMPLEADOS.getEmpleados().subscribe((res) => {
       this.empleados = res;
     });
-
   }
 
   obtenerPuestos() {
@@ -65,21 +62,22 @@ export class RecursosHumanosView {
     });
   }
 
-  obtenerGeneros(){
+  obtenerGeneros() {
     this.proySrv.EMPLEADOS.getGeneros().subscribe((res) => {
       this.generos = res;
     });
   }
 
-  obtenerTiposPago(){
+  obtenerTiposPago() {
     this.proySrv.TIPOS_O_FORMAS.getTiposPago().subscribe((res) => {
       this.tipoPago = res;
     });
   }
 
   guardarEmpleado() {
-    this.proySrv.EMPLEADOS.crearEmpleado(this.newEmpleado).subscribe((res) => {
-    });
+    this.proySrv.EMPLEADOS.crearEmpleado(this.newEmpleado).subscribe(
+      (res) => {}
+    );
   }
 
   buscarEmpleado() {
@@ -87,19 +85,21 @@ export class RecursosHumanosView {
       return;
     }
 
-    this.empleado = this.empleados.find((p) => p.alias === this.aliasEmpleadoBuscado);
+    this.empleado = this.empleados.find(
+      (p) => p.alias === this.aliasEmpleadoBuscado
+    );
 
     if (this.empleado) {
       this.newEmpleado = structuredClone(this.empleado);
-      this.nombreCompleto = this.newEmpleado.nombre + ' ' + this.newEmpleado.apellido;
+      this.nombreCompleto =
+        this.newEmpleado.nombre + ' ' + this.newEmpleado.apellido;
     }
     console.log(this.empleado);
-    if( this.empleado?.puesto){
+    if (this.empleado?.puesto) {
       this.newEmpleado.tipoPago.id = this.empleado?.tipoPago.id;
       this.newEmpleado.puesto.id = this.empleado?.puesto.id;
       this.newEmpleado.genero.id = this.empleado?.genero.id;
     }
-
   }
 
   handleClickInhabilitado() {
@@ -108,13 +108,60 @@ export class RecursosHumanosView {
   }
 
   updateEmpleados() {
-    this.proySrv.EMPLEADOS.updateEmpleado(this.newEmpleado!).subscribe(
-      () => {
-        this.alerta.showSuccess('Empleado actualizado!');
-        this.obtenerEmpleados();
+    this.proySrv.EMPLEADOS.updateEmpleado(this.newEmpleado!).subscribe(() => {
+      this.alerta.showSuccess('Empleado actualizado!');
+      this.obtenerEmpleados();
+    });
+  }
 
-      }
-    );
+  getFirstNameOfFile(fileList: FileList | null) {
+    if (!fileList) return '';
+
+    const hasFiles = fileList.length > 0;
+    if (!hasFiles) return '';
+
+    const firstFile = fileList[0];
+    return firstFile?.name ?? 'N/A';
+  }
+
+  getPreviewImageFile(file?: File) {
+    if (!file) return '';
+    return URL.createObjectURL(file);
+  }
+
+  async updateImageEmpleado(file?: File) {
+    if (!file) return this.alerta.showWarn('Seleccione una imagen');
+    if (!this.empleado) return this.alerta.showWarn('Seleccione un empleado');
+
+    const FORMATOS_VALIDOS = ['image/png', 'image/jpeg', 'image/jpg'];
+
+    if (!FORMATOS_VALIDOS.includes(file.type)) {
+      this.alerta.showWarn('Formato de imagen no válido');
+      return;
+    }
+
+    const fileAsBase64 = await this.fileToBase64(file);
+
+    if (!fileAsBase64 || typeof fileAsBase64 !== 'string') {
+      this.alerta.showWarn('Error al cargar la imagen');
+      return;
+    }
+
+    this.proySrv.EMPLEADOS.updateImageEmpleado(
+      this.empleado.id,
+      fileAsBase64
+    ).subscribe(() => {
+      this.alerta.showSuccess('Imagen actualizada');
+    });
+  }
+
+  async fileToBase64(file: File) {
+    return new Promise<string | ArrayBuffer | null>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
   }
 
   getUrlImageEmpleado(empleado: Empleado) {

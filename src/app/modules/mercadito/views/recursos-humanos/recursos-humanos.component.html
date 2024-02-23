@@ -25,6 +25,33 @@
         }
       </div>
       <h1 class="text-white text-xl p-3">{{ nombreCompleto }}</h1>
+      @if (newEmpleado.id) {
+        <button
+        (click)="opActualizarImagen.toggle($event)"
+        class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg hover:bg-white hover:text-appPrimary-700 transition-all duration-300 ease-in-out focus:outline-none"
+      >
+        Actualizar Imagen
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-cloud-upload"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"
+          />
+          <path d="M9 15l3 -3l3 3" />
+          <path d="M12 12l0 9" />
+        </svg>
+      </button>
+      }
       <label class="block">
         <input
           [(ngModel)]="aliasEmpleadoBuscado"
@@ -289,6 +316,53 @@
       </main>
     </section>
   </div>
+  <p-overlayPanel #opActualizarImagen>
+    <ng-template pTemplate="content">
+      <main class="flex flex-col gap-3">
+        <div class="flex flex-col items-center justify-center w-full gap-3">
+          @if (fileUpload.files?.[0]) { Archivo seleccionado:
+          {{ getFirstNameOfFile(fileUpload.files) }}
+          }
+          <label
+            for="dropzone-file"
+            class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg cursor-pointer bg-gray-700 border-gray-600 hover:border-gray-500 hover:bg-gray-600"
+          >
+            <div class="flex flex-col items-center justify-center pt-5 pb-6 px-3">
+              <svg
+                class="w-8 h-8 mb-4 text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 16"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                />
+              </svg>
+              <p class="mb-2 text-sm text-gray-400">
+                <span class="font-semibold">Clic para subir</span>
+                o arrastra y suelta una imagen
+              </p>
+              <p class="text-xs text-gray-400">JPEG, JPG, PNG (MAX. 800x400px)</p>
+            </div>
+            <input id="dropzone-file" #fileUpload type="file" class="hidden" />
+          </label>
+        </div>
+        @if (fileUpload.files?.[0]) {
+        <button
+          (click)="updateImageEmpleado(fileUpload.files?.[0])"
+          class="bg-appPrimary-400 p-1 rounded-xl flex gap-3 justify-center"
+        >
+          Subir
+        </button>
+        }
+      </main>
+    </ng-template>
+  </p-overlayPanel>
   <footer class="flex items-center justify-end">
     <button
       (click)="updateEmpleados()"
