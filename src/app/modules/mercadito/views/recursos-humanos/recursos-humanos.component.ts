@@ -20,6 +20,8 @@ export class RecursosHumanosView {
   generos: Genero[] = [];
   tipoPago: TipoPago[] = [];
   nombreCompleto!: string;
+  formValido = true;
+  busquedaEmpleado: boolean = false;
 
   aliasEmpleadoBuscado = '';
 
@@ -32,12 +34,6 @@ export class RecursosHumanosView {
     alias: '',
     salario: 9000,
     observaciones: '',
-    puesto: {},
-    genero: {},
-    tipoPago: {},
-    idPuesto: 0, // Inicializar como necesario
-    idGenero: 0, // Inicializar como necesario
-    idTipoPago: 0, // Inicializar como necesario
   } as Empleado;
 
   constructor(
@@ -74,9 +70,37 @@ export class RecursosHumanosView {
     });
   }
 
+  marcarComoDirty(): boolean {
+    if (
+      this.newEmpleado.nombre &&
+      this.newEmpleado.apellido &&
+      this.newEmpleado.email &&
+      this.newEmpleado.telefono &&
+      this.newEmpleado.alias &&
+      this.newEmpleado.salario &&
+      this.newEmpleado.observaciones &&
+      this.newEmpleado.puesto.id &&
+      this.newEmpleado.genero.id &&
+      this.newEmpleado.tipoPago.id
+    ) {
+      return true;
+    }
+    this.formValido = false;
+    this.alerta.showWarn('Por favor, llene todos los campos');
+    return false;
+  }
+
   guardarEmpleado() {
     this.proySrv.EMPLEADOS.crearEmpleado(this.newEmpleado).subscribe(
-      (res) => {}
+      (res) => {
+        if (this.marcarComoDirty()) {
+          this.alerta.showSuccess('Empleado creado!');
+        }
+        this.obtenerEmpleados();
+      },
+      (err) => {
+        this.alerta.showError(`Error al crear el empleado ${err}`);
+      }
     );
   }
 
@@ -109,7 +133,9 @@ export class RecursosHumanosView {
 
   updateEmpleados() {
     this.proySrv.EMPLEADOS.updateEmpleado(this.newEmpleado!).subscribe(() => {
-      this.alerta.showSuccess('Empleado actualizado!');
+      if (this.marcarComoDirty()) {
+        this.alerta.showSuccess('Empleado actualizado!');
+      }
       this.obtenerEmpleados();
     });
   }

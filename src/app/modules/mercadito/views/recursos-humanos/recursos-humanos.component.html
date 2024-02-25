@@ -2,17 +2,25 @@
 <main class="p-4">
   <div class="grid gap-3">
     <div
-      class="text-center p-3 border-round-sm font-bold col-start-1 col-end-4"
+      class="relative text-center p-3 border-round-sm font-bold col-start-1 col-end-4"
     >
       <div
         class="w-full rounded-lg flex justify-center items-center flex-col gap-3"
       >
+        <div class="flex align-items-center gap-2">
+          <p-checkbox
+            [(ngModel)]="busquedaEmpleado"
+            [binary]="true"
+          ></p-checkbox>
+          <label>Buscar Empleado</label>
+        </div>
+
         @if (!newEmpleado.id || aliasEmpleadoBuscado === '') {
         <img
           src="https://i.ibb.co/BCGVdCJ/800x800-1.png"
           alt="Usuario"
           class="rounded-lg object-cover h-96"
-          style="width: 300px; height: 300px;"
+          style="width: 300px; height: 300px"
         />
 
         }@else {
@@ -20,101 +28,100 @@
           [src]="getUrlImageEmpleado(newEmpleado)"
           alt="Usuario"
           class="rounded-lg object-cover h-96"
-          style="width: 300px; height: 300px;"
+          style="width: 300px; height: 300px"
         />
+        } @if (newEmpleado.id && aliasEmpleadoBuscado !== '' ) {
+        <button
+          [pTooltip]="'Actualizar imagen'"
+          (click)="opActualizarImagen.toggle($event)"
+          class="absolute bottom-0 right-0 m-3 border py-2 px-2 rounded-lg hover:bg-white hover:text-appPrimary-700 transition-all duration-300 ease-in-out focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-cloud-upload"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"
+            />
+            <path d="M9 15l3 -3l3 3" />
+            <path d="M12 12l0 9" />
+          </svg>
+        </button>
         }
       </div>
-      <h1 class="text-white text-xl p-3">{{ nombreCompleto }}</h1>
-      @if (newEmpleado.id) {
-        <button
-        (click)="opActualizarImagen.toggle($event)"
-        class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg hover:bg-white hover:text-appPrimary-700 transition-all duration-300 ease-in-out focus:outline-none"
-      >
-        Actualizar Imagen
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="icon icon-tabler icon-tabler-cloud-upload"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"
+      @if(busquedaEmpleado){
+        <h1 class="text-white text-xl p-3">{{ nombreCompleto }}</h1>
+        <label class="block">
+          <input
+            [(ngModel)]="aliasEmpleadoBuscado"
+            (ngModelChange)="buscarEmpleado()"
+            type="text"
+            id="input-group-1"
+            class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 w-9/12 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
           />
-          <path d="M9 15l3 -3l3 3" />
-          <path d="M12 12l0 9" />
-        </svg>
-      </button>
+        </label>
+        <small class="text-white"
+          >Busca un empleado por su código o registra uno*</small
+        >
       }
-      <label class="block">
-        <input
-          [(ngModel)]="aliasEmpleadoBuscado"
-          (ngModelChange)="buscarEmpleado()"
-          type="text"
-          id="input-group-1"
-          class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 w-9/12 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
-        />
-      </label>
-      <small class="text-white"
-        >Busca un empleado por su código o registra uno*</small
-      >
       @if (newEmpleado.id && aliasEmpleadoBuscado !== '') {
-        <span class="w-full">
-          <button
-            (click)="handleClickInhabilitado()"
-            class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg {{
-              newEmpleado.inhabilitado
-                ? 'hover:bg-green-600'
-                : 'hover:bg-red-600'
-            }} text-white transition-all duration-300 ease-in-out focus:outline-none"
+      <span class="w-full">
+        <button
+          (click)="handleClickInhabilitado()"
+          class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg {{
+            newEmpleado.inhabilitado ? 'hover:bg-green-600' : 'hover:bg-red-600'
+          }} text-white transition-all duration-300 ease-in-out focus:outline-none"
+        >
+          {{ newEmpleado.inhabilitado ? "Habilitar" : "Inhabilitar" }}
+          @if (!newEmpleado.inhabilitado) {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-ban"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            {{ newEmpleado.inhabilitado ? "Habilitar" : "Inhabilitar" }}
-            @if (!newEmpleado.inhabilitado) {
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="icon icon-tabler icon-tabler-ban"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-              <path d="M5.7 5.7l12.6 12.6" />
-            </svg>
-            } @else {
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="icon icon-tabler icon-tabler-brand-gumroad"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M21 12a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z" />
-              <path d="M13.5 13h2.5v3" />
-              <path
-                d="M15.024 9.382a4 4 0 1 0 -3.024 6.618c1.862 0 2.554 -1.278 3 -3"
-              />
-            </svg>
-            }
-          </button>
-        </span>
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M5.7 5.7l12.6 12.6" />
+          </svg>
+          } @else {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-brand-gumroad"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M21 12a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z" />
+            <path d="M13.5 13h2.5v3" />
+            <path
+              d="M15.024 9.382a4 4 0 1 0 -3.024 6.618c1.862 0 2.554 -1.278 3 -3"
+            />
+          </svg>
+          }
+        </button>
+      </span>
       }
     </div>
     <section class="col-start-4 col-end-12 flex flex-col gap-3">
@@ -133,10 +140,16 @@
                 name="nombre"
                 [(ngModel)]="newEmpleado.nombre"
                 type="text"
+                [readOnly]="busquedaEmpleado"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="David Hernan"
               />
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -149,10 +162,16 @@
                 name="apellido"
                 [(ngModel)]="newEmpleado.apellido"
                 type="text"
+                [readOnly]="busquedaEmpleado"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="Gallo Hernandez"
               />
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -164,11 +183,17 @@
               <input
                 name="email"
                 [(ngModel)]="newEmpleado.email"
+                [readOnly]="busquedaEmpleado"
                 type="email"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="estudiante@ceutec.edu"
               />
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -179,12 +204,18 @@
               </label>
               <input
                 name="password"
+                [readOnly]="busquedaEmpleado"
                 [(ngModel)]="newEmpleado.password"
                 type="password"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="*********"
               />
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -200,6 +231,11 @@
                 placeholder="9561-9455"
               >
               </p-inputMask>
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -211,12 +247,18 @@
               <input
                 name="salario"
                 [min]="9000"
+                [readOnly]="busquedaEmpleado"
                 [(ngModel)]="newEmpleado.salario"
                 type="number"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="18000.00"
               />
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
           </div>
         </fieldset>
@@ -231,12 +273,18 @@
               </label>
               <input
                 name="alias"
+                [readOnly]="busquedaEmpleado"
                 [(ngModel)]="newEmpleado.alias"
                 type="text"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="crywhat, dgallo, nlopez..."
               />
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -246,9 +294,8 @@
                 Puesto
               </label>
               <p-dropdown
-                optionValue="id"
-                [(ngModel)]="newEmpleado.puesto"
                 [options]="puestos"
+                [(ngModel)]="newEmpleado.puesto"
                 placeholder="Seleccionar un puesto"
                 emptyMessage="No hay puestos disponibles"
                 appendTo="body"
@@ -256,6 +303,11 @@
                 styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 optionLabel="descripcion"
               ></p-dropdown>
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -265,7 +317,6 @@
                 Genero
               </label>
               <p-dropdown
-                optionValue="id"
                 [(ngModel)]="newEmpleado.genero"
                 [options]="generos"
                 placeholder="Seleccionar un género"
@@ -275,6 +326,11 @@
                 styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 optionLabel="descripcion"
               ></p-dropdown>
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -284,7 +340,6 @@
                 Tipo Pago
               </label>
               <p-dropdown
-                optionValue="id"
                 [(ngModel)]="newEmpleado.tipoPago"
                 [options]="tipoPago"
                 placeholder="Seleccionar un tipo de pago"
@@ -294,6 +349,11 @@
                 styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 optionLabel="descripcion"
               ></p-dropdown>
+              @if(!formValido){
+              <div class="alert alert-danger">
+                <p style="color: red">*Debe rellenar este campo</p>
+              </div>
+              }
             </span>
             <span class="w-full">
               <label
@@ -305,6 +365,7 @@
               <textarea
                 name="observaciones"
                 [(ngModel)]="newEmpleado.observaciones"
+                [readOnly]="busquedaEmpleado"
                 type="text"
                 id="input-group-1"
                 class="w-full resize-none h-20 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
@@ -327,7 +388,9 @@
             for="dropzone-file"
             class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg cursor-pointer bg-gray-700 border-gray-600 hover:border-gray-500 hover:bg-gray-600"
           >
-            <div class="flex flex-col items-center justify-center pt-5 pb-6 px-3">
+            <div
+              class="flex flex-col items-center justify-center pt-5 pb-6 px-3"
+            >
               <svg
                 class="w-8 h-8 mb-4 text-gray-400"
                 aria-hidden="true"
@@ -347,7 +410,9 @@
                 <span class="font-semibold">Clic para subir</span>
                 o arrastra y suelta una imagen
               </p>
-              <p class="text-xs text-gray-400">JPEG, JPG, PNG (MAX. 800x400px)</p>
+              <p class="text-xs text-gray-400">
+                JPEG, JPG, PNG (MAX. 800x400px)
+              </p>
             </div>
             <input id="dropzone-file" #fileUpload type="file" class="hidden" />
           </label>
@@ -364,11 +429,40 @@
     </ng-template>
   </p-overlayPanel>
   <footer class="flex items-center justify-end">
-    <button
+    @if(!busquedaEmpleado){
+      <button
+        (click)="guardarEmpleado()"
+        pButton
+        type="button"
+        label="Guardar"
+        class="flex justify-center gap-3 border py-2 px-4 hover:bg-green-600 transition-all duration-300 rounded-lg ease-in-out focus:outline-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-device-floppy"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
+          />
+          <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M14 4l0 4l-6 0l0 -4" />
+        </svg>
+      </button>
+    }@else if(empleado){
+      <button
       (click)="updateEmpleados()"
       pButton
       type="button"
-      label="Guardar"
+      label="Actualizar"
       class="flex justify-center gap-3 border py-2 px-4 hover:bg-green-600 transition-all duration-300 rounded-lg ease-in-out focus:outline-none"
     >
       <svg
@@ -391,5 +485,6 @@
         <path d="M14 4l0 4l-6 0l0 -4" />
       </svg>
     </button>
+    }
   </footer>
 </main>
