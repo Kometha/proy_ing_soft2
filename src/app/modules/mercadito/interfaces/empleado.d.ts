@@ -13,7 +13,19 @@ export interface Empleado {
   observaciones: string;
   puesto: Puesto;
   genero: Genero;
-  password?: string;
   tipoPago: TipoPago;
   observaciones?: string;
+}
+
+export interface EmpleadoCreate {
+  nombre: string;
+  apellido: string;
+  email: string;
+  telefono: string;
+  idPuesto: number;
+  idGenero: number;
+  alias: string;
+  password: string;
+  salario: number;
+  idTipoPago: number;
 }

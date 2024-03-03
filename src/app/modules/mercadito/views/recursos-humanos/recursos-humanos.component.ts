@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
-import { Empleado } from '../../interfaces/empleado';
+import { Empleado, EmpleadoCreate } from '../../interfaces/empleado';
 import { Genero, Puesto, TipoPago } from '../../interfaces/misc-types';
 import { URL_BASE, IMAGES_FOLDERS } from '../../../../config/config';
 import { AlertaService } from '../../../../services/alertas/alerta.service';
@@ -16,25 +16,28 @@ export class RecursosHumanosView {
 
   empleados: Empleado[] = [];
   empleado?: Empleado;
-  puestos: Puesto[] = [];
-  generos: Genero[] = [];
-  tipoPago: TipoPago[] = [];
-  nombreCompleto!: string;
-  formValido = true;
-  busquedaEmpleado: boolean = false;
-
-  aliasEmpleadoBuscado = '';
-
-  newEmpleado: Empleado = {
+  newEmpleado: EmpleadoCreate = {
     nombre: '',
     apellido: '',
     email: '',
-    password: '',
     telefono: '',
+    idPuesto: 0,
+    idGenero: 0,
     alias: '',
-    salario: 9000,
-    observaciones: '',
-  } as Empleado;
+    password: '',
+    salario: 0,
+    idTipoPago: 0,
+  };
+
+  puestos: Puesto[] = [];
+  generos: Genero[] = [];
+  tipoPago: TipoPago[] = [];
+  formValido = true;
+  newPassword: string = '';
+
+  visibleModalNuevoEmpleado = true;
+
+  aliasEmpleadoBuscado = '';
 
   constructor(
     private proySrv: ProyIngSoftService,
@@ -49,6 +52,9 @@ export class RecursosHumanosView {
   obtenerEmpleados() {
     this.proySrv.EMPLEADOS.getEmpleados().subscribe((res) => {
       this.empleados = res;
+      if (this.empleado) {
+        this.buscarEmpleado();
+      }
     });
   }
 
@@ -71,17 +77,19 @@ export class RecursosHumanosView {
   }
 
   marcarComoDirty(): boolean {
+    if (!this.empleado) return false;
+
     if (
-      this.newEmpleado.nombre &&
-      this.newEmpleado.apellido &&
-      this.newEmpleado.email &&
-      this.newEmpleado.telefono &&
-      this.newEmpleado.alias &&
-      this.newEmpleado.salario &&
-      this.newEmpleado.observaciones &&
-      this.newEmpleado.puesto.id &&
-      this.newEmpleado.genero.id &&
-      this.newEmpleado.tipoPago.id
+      this.empleado.nombre &&
+      this.empleado.apellido &&
+      this.empleado.email &&
+      this.empleado.telefono &&
+      this.empleado.alias &&
+      this.empleado.salario &&
+      this.empleado.observaciones &&
+      this.empleado.puesto.id &&
+      this.empleado.genero.id &&
+      this.empleado.tipoPago.id
     ) {
       return true;
     }
@@ -90,18 +98,34 @@ export class RecursosHumanosView {
     return false;
   }
 
-  guardarEmpleado() {
-    this.proySrv.EMPLEADOS.crearEmpleado(this.newEmpleado).subscribe(
-      (res) => {
-        if (this.marcarComoDirty()) {
-          this.alerta.showSuccess('Empleado creado!');
-        }
-        this.obtenerEmpleados();
-      },
-      (err) => {
-        this.alerta.showError(`Error al crear el empleado ${err}`);
-      }
-    );
+  marcarComoDirtyNuevoEmpleado(): boolean {
+    if (
+      this.newEmpleado.nombre &&
+      this.newEmpleado.apellido &&
+      this.newEmpleado.email &&
+      this.newEmpleado.telefono &&
+      this.newEmpleado.alias &&
+      this.newEmpleado.salario &&
+      this.newEmpleado.password &&
+      this.newEmpleado.idPuesto &&
+      this.newEmpleado.idGenero &&
+      this.newEmpleado.idTipoPago
+    ) {
+      return true;
+    }
+    this.formValido = false;
+    this.alerta.showWarn('Por favor, llene todos los campos');
+    return false;
+  }
+
+  crearEmpleado() {
+    if (!this.marcarComoDirtyNuevoEmpleado()) {
+      return this.alerta.showWarn('Por favor, llene todos los campos');
+    }
+    this.proySrv.EMPLEADOS.crearEmpleado(this.newEmpleado).subscribe(() => {
+      this.alerta.showSuccess('Empleado creado!');
+      this.obtenerEmpleados();
+    });
   }
 
   buscarEmpleado() {
@@ -109,30 +133,55 @@ export class RecursosHumanosView {
       return;
     }
 
-    this.empleado = this.empleados.find(
+    const empleadoEncontrado = this.empleados.find(
       (p) => p.alias === this.aliasEmpleadoBuscado
     );
 
-    if (this.empleado) {
-      this.newEmpleado = structuredClone(this.empleado);
-      this.nombreCompleto =
-        this.newEmpleado.nombre + ' ' + this.newEmpleado.apellido;
-    }
-    console.log(this.empleado);
-    if (this.empleado?.puesto) {
-      this.newEmpleado.tipoPago.id = this.empleado?.tipoPago.id;
-      this.newEmpleado.puesto.id = this.empleado?.puesto.id;
-      this.newEmpleado.genero.id = this.empleado?.genero.id;
-    }
+    if (!empleadoEncontrado) return;
+
+    this.empleado = structuredClone(empleadoEncontrado);
+    this.newPassword = '';
   }
 
   handleClickInhabilitado() {
-    this.newEmpleado!.inhabilitado = !this.newEmpleado!.inhabilitado;
+    if (!this.empleado) return this.alerta.showWarn('Seleccione un empleado');
+
+    this.empleado.inhabilitado = this.empleado.inhabilitado;
     this.updateEmpleados();
   }
 
   updateEmpleados() {
-    this.proySrv.EMPLEADOS.updateEmpleado(this.newEmpleado!).subscribe(() => {
+    if (!this.empleado) return this.alerta.showWarn('Seleccione un empleado');
+
+    const {
+      nombre,
+      apellido,
+      email,
+      telefono,
+      puesto: { id: idPuesto },
+      genero: { id: idGenero },
+      alias,
+      salario,
+      tipoPago: { id: idTipoPago },
+      id,
+    } = this.empleado;
+
+    const updatedEmpleado: EmpleadoCreate = {
+      nombre,
+      apellido,
+      email,
+      telefono,
+      idPuesto,
+      idGenero,
+      alias,
+      salario,
+      idTipoPago,
+      password: this.newPassword,
+    };
+    this.proySrv.EMPLEADOS.updateEmpleado({
+      id,
+      updatedEmpleado: updatedEmpleado,
+    }).subscribe(() => {
       if (this.marcarComoDirty()) {
         this.alerta.showSuccess('Empleado actualizado!');
       }

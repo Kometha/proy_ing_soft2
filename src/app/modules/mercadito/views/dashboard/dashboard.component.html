@@ -1,10 +1,10 @@
 <main
   class="h-screen flex flex-col gap-3 justify-center items-center text-appPrimary-200 p-3"
 >
-  <section class="text-appPrimary-50 mb-3">
+  <section class="text-appPrimary-50 mb-3 text-2xl">
     <h1>Bienvenido al sistema de Galope</h1>
     <small> Selecciona un módulo para comenzar </small>
-    <small class="text-red-500 cursor-pointer hover:scale-75">
+    <small class="text-red-500 cursor-pointer cerrar-sesion-text">
       <a (click)="logout()">Cerrar sesión</a>
     </small>
   </section>
@@ -16,6 +16,26 @@
     >
       <app-module-card>
         @if (permisos.recursosHumanos) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-users-group"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" />
+          <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M17 10h2a2 2 0 0 1 2 2v1" />
+          <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M3 13v-1a2 2 0 0 1 2 -2h2" />
+        </svg>
         <h1>Recursos Humanos</h1>
         } @else {
         <h1 class="text-red-700">🚫 No autorizado</h1>
@@ -26,6 +46,24 @@
     <a [routerLink]="[permisos.compras ? '/mercadito/compras' : '#']">
       <app-module-card>
         @if (permisos.compras) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-currency-dollar"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2"
+          />
+          <path d="M12 3v3m0 12v3" />
+        </svg>
         <h1>Compras</h1>
         } @else {
         <h1 class="text-red-700">🚫 No autorizado</h1>
@@ -36,6 +74,24 @@
     <a [routerLink]="[permisos.ventas ? '/mercadito/ventas' : '#']">
       <app-module-card>
         @if (permisos.ventas) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-shopping-cart"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+          <path d="M17 17h-11v-14h-2" />
+          <path d="M6 5l14 1l-1 7h-13" />
+        </svg>
         <h1>Ventas</h1>
         } @else {
         <h1 class="text-red-700">🚫 No autorizado</h1>
@@ -46,6 +102,29 @@
     <a [routerLink]="[permisos.mercadeo ? '/mercadito/mercadeo' : '']">
       <app-module-card>
         @if (permisos.mercadeo) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-cheese"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M4.519 20.008l16.481 -.008v-3.5a2 2 0 1 1 0 -4v-3.5h-16.722"
+          />
+          <path
+            d="M21 9l-9.385 -4.992c-2.512 .12 -4.758 1.42 -6.327 3.425c-1.423 1.82 -2.288 4.221 -2.288 6.854c0 2.117 .56 4.085 1.519 5.721"
+          />
+          <path d="M15 13v.01" />
+          <path d="M8 13v.01" />
+          <path d="M11 16v.01" />
+        </svg>
         <h1>Mercadeo</h1>
         } @else {
         <h1 class="text-red-700">🚫 No autorizado</h1>

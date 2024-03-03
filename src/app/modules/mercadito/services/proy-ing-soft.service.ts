@@ -4,7 +4,7 @@ import { DATA_USER_KEY, Header, WEB_SERVICE } from '../../../config/config';
 import { EMPTY, Observable, catchError, map } from 'rxjs';
 import { AlertaService } from '../../../services/alertas/alerta.service';
 import { ApiResponse } from '../interfaces/api-response';
-import { Empleado } from '../interfaces/empleado';
+import { Empleado, EmpleadoCreate } from '../interfaces/empleado';
 import { Router } from '@angular/router';
 import { Permisos } from '../interfaces/permisos';
 import { PERMISOS_MODULOS } from '../../../config/config';
@@ -229,9 +229,9 @@ export class ProyIngSoftService {
           catchError(this.handleError)
         );
     },
-    crearEmpleado: (empleado: Empleado) => {
+    crearEmpleado: (props: EmpleadoCreate) => {
       return this.http
-        .post<ApiResponse<Empleado>>(`${URL_BASE}/empleados`, empleado, {
+        .post<ApiResponse<Empleado>>(`${URL_BASE}/empleados`, props, {
           headers,
         })
         .pipe(
@@ -241,34 +241,14 @@ export class ProyIngSoftService {
     },
     updateEmpleado: ({
       id,
-      createdAt,
-      nombre,
-      apellido,
-      email,
-      telefono,
-      alias,
-      salario,
-      inhabilitado,
-      observaciones,
-      puesto: { id: idPuesto },
-      genero: { id: idGenero },
-      tipoPago: { id: idTipoPago },
-
-    }: Empleado) => {
+      updatedEmpleado
+    }: {
+      id: number;
+      updatedEmpleado: EmpleadoCreate;
+    }) => {
       const url = `${URL_BASE}/empleados/${id}`;
       const body = {
-        createdAt,
-        nombre,
-        apellido,
-        email,
-        telefono,
-        alias,
-        salario,
-        inhabilitado,
-        observaciones,
-        idPuesto,
-        idGenero,
-        idTipoPago,
+        ...updatedEmpleado,
       };
       return this.http.put<ApiResponse<Empleado>>(url, body, { headers }).pipe(
         map(({ isSuccess, message }) => {

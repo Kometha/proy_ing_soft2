@@ -7,125 +7,112 @@
       <div
         class="w-full rounded-lg flex justify-center items-center flex-col gap-3"
       >
-        <div class="flex align-items-center gap-2">
-          <p-checkbox
-            [(ngModel)]="busquedaEmpleado"
-            [binary]="true"
-          ></p-checkbox>
-          <label>Buscar Empleado</label>
-        </div>
-
-        @if (!newEmpleado.id || aliasEmpleadoBuscado === '') {
-        <img
-          src="https://i.ibb.co/BCGVdCJ/800x800-1.png"
-          alt="Usuario"
-          class="rounded-lg object-cover h-96"
-          style="width: 300px; height: 300px"
+        <input
+          [(ngModel)]="aliasEmpleadoBuscado"
+          (ngModelChange)="buscarEmpleado()"
+          type="text"
+          id="input-group-1"
+          class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 w-9/12 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
         />
-
-        }@else {
-        <img
-          [src]="getUrlImageEmpleado(newEmpleado)"
-          alt="Usuario"
-          class="rounded-lg object-cover h-96"
-          style="width: 300px; height: 300px"
-        />
-        } @if (newEmpleado.id && aliasEmpleadoBuscado !== '' ) {
-        <button
-          [pTooltip]="'Actualizar imagen'"
-          (click)="opActualizarImagen.toggle($event)"
-          class="absolute bottom-0 right-0 m-3 border py-2 px-2 rounded-lg hover:bg-white hover:text-appPrimary-700 transition-all duration-300 ease-in-out focus:outline-none"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-cloud-upload"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+        <small class="text-white">
+          Busca un empleado por su código o
+          <span
+            (click)="visibleModalNuevoEmpleado = true"
+            class="text-green-300 hover:underline cursor-pointer transition-all"
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"
-            />
-            <path d="M9 15l3 -3l3 3" />
-            <path d="M12 12l0 9" />
-          </svg>
-        </button>
+            registra uno
+          </span>
+        </small>
+        @if (!empleado) { } @else {
+        <!--  -->
+        <img
+          [src]="getUrlImageEmpleado(empleado)"
+          onerror="this.error = null;this.src='https://i.ibb.co/BCGVdCJ/800x800-1.png';"
+          alt="Usuario"
+          class="rounded-lg object-cover size-[300px]"
+        />
+        <span class="flex justify-between gap-2">
+          <button
+            (click)="handleClickInhabilitado()"
+            class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg {{
+              empleado.inhabilitado ? 'hover:bg-green-600' : 'hover:bg-red-600'
+            }} text-white transition-all duration-300 ease-in-out focus:outline-none"
+          >
+            {{ empleado.inhabilitado ? "Habilitar" : "Inhabilitar" }}
+            @if (!empleado.inhabilitado) {
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-ban"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+              <path d="M5.7 5.7l12.6 12.6" />
+            </svg>
+            } @else {
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-brand-gumroad"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M21 12a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z" />
+              <path d="M13.5 13h2.5v3" />
+              <path
+                d="M15.024 9.382a4 4 0 1 0 -3.024 6.618c1.862 0 2.554 -1.278 3 -3"
+              />
+            </svg>
+            }
+          </button>
+          <button
+            pTooltip="Actualizar imagen"
+            (click)="opActualizarImagen.toggle($event)"
+            class="border py-2 px-2 rounded-lg hover:bg-white hover:text-appPrimary-700 transition-all duration-300 ease-in-out focus:outline-none"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-cloud-upload"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"
+              />
+              <path d="M9 15l3 -3l3 3" />
+              <path d="M12 12l0 9" />
+            </svg>
+          </button>
+        </span>
+
         }
       </div>
-      @if(busquedaEmpleado){
-        <h1 class="text-white text-xl p-3">{{ nombreCompleto }}</h1>
-        <label class="block">
-          <input
-            [(ngModel)]="aliasEmpleadoBuscado"
-            (ngModelChange)="buscarEmpleado()"
-            type="text"
-            id="input-group-1"
-            class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 w-9/12 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
-          />
-        </label>
-        <small class="text-white"
-          >Busca un empleado por su código o registra uno*</small
-        >
-      }
-      @if (newEmpleado.id && aliasEmpleadoBuscado !== '') {
-      <span class="w-full">
-        <button
-          (click)="handleClickInhabilitado()"
-          class="flex justify-center gap-3 border w-full py-2 px-2 rounded-lg {{
-            newEmpleado.inhabilitado ? 'hover:bg-green-600' : 'hover:bg-red-600'
-          }} text-white transition-all duration-300 ease-in-out focus:outline-none"
-        >
-          {{ newEmpleado.inhabilitado ? "Habilitar" : "Inhabilitar" }}
-          @if (!newEmpleado.inhabilitado) {
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-ban"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-            <path d="M5.7 5.7l12.6 12.6" />
-          </svg>
-          } @else {
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-brand-gumroad"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M21 12a9 9 0 1 1 -18 0a9 9 0 0 1 18 0z" />
-            <path d="M13.5 13h2.5v3" />
-            <path
-              d="M15.024 9.382a4 4 0 1 0 -3.024 6.618c1.862 0 2.554 -1.278 3 -3"
-            />
-          </svg>
-          }
-        </button>
-      </span>
-      }
     </div>
     <section class="col-start-4 col-end-12 flex flex-col gap-3">
       <header class="text-lg text-appPrimary-200">Datos del empleado</header>
+      @if (!empleado) {
+      <div class="text-red-500">No se encontró el empleado</div>
+      } @else {
       <main class="w-full grid box-content grid-cols-2 p-2">
         <fieldset class="flex flex-col gap-2">
           <div class="flex flex-col w-11/12 mt-1 gap-2">
@@ -138,9 +125,8 @@
               </label>
               <input
                 name="nombre"
-                [(ngModel)]="newEmpleado.nombre"
+                [(ngModel)]="empleado.nombre"
                 type="text"
-                [readOnly]="busquedaEmpleado"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="David Hernan"
@@ -160,9 +146,8 @@
               </label>
               <input
                 name="apellido"
-                [(ngModel)]="newEmpleado.apellido"
+                [(ngModel)]="empleado.apellido"
                 type="text"
-                [readOnly]="busquedaEmpleado"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
                 placeholder="Gallo Hernandez"
@@ -182,8 +167,7 @@
               </label>
               <input
                 name="email"
-                [(ngModel)]="newEmpleado.email"
-                [readOnly]="busquedaEmpleado"
+                [(ngModel)]="empleado.email"
                 type="email"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
@@ -195,7 +179,7 @@
               </div>
               }
             </span>
-            <span class="w-full">
+            <!-- <span class="w-full">
               <label
                 for="input-group-1"
                 class="block mb-2 text-sm font-medium text-appPrimary-200"
@@ -205,7 +189,7 @@
               <input
                 name="password"
                 [readOnly]="busquedaEmpleado"
-                [(ngModel)]="newEmpleado.password"
+                [(ngModel)]="newPassword"
                 type="password"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
@@ -216,7 +200,7 @@
                 <p style="color: red">*Debe rellenar este campo</p>
               </div>
               }
-            </span>
+            </span> -->
             <span class="w-full">
               <label
                 for="input-group-1"
@@ -225,10 +209,10 @@
                 Telefono
               </label>
               <p-inputMask
-                mask="9999-9999"
-                [(ngModel)]="newEmpleado.telefono"
+                mask="+504 9999-9999"
+                [(ngModel)]="empleado.telefono"
                 styleClass="bg-appPrimary-800 w-full rounded-lg p-2 border border-gray-300 outline-none hover:ring-2 hover:ring-appPrimary-400 focus:ring-2 focus:ring-appPrimary-300 transition-all duration-300 ease-in-out"
-                placeholder="9561-9455"
+                placeholder="+504 9999-9999"
               >
               </p-inputMask>
               @if(!formValido){
@@ -246,9 +230,8 @@
               </label>
               <input
                 name="salario"
-                [min]="9000"
-                [readOnly]="busquedaEmpleado"
-                [(ngModel)]="newEmpleado.salario"
+                [min]="15333"
+                [(ngModel)]="empleado.salario"
                 type="number"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
@@ -273,8 +256,7 @@
               </label>
               <input
                 name="alias"
-                [readOnly]="busquedaEmpleado"
-                [(ngModel)]="newEmpleado.alias"
+                [(ngModel)]="empleado.alias"
                 type="text"
                 id="input-group-1"
                 class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
@@ -295,7 +277,7 @@
               </label>
               <p-dropdown
                 [options]="puestos"
-                [(ngModel)]="newEmpleado.puesto"
+                [(ngModel)]="empleado.puesto"
                 placeholder="Seleccionar un puesto"
                 emptyMessage="No hay puestos disponibles"
                 appendTo="body"
@@ -317,7 +299,7 @@
                 Genero
               </label>
               <p-dropdown
-                [(ngModel)]="newEmpleado.genero"
+                [(ngModel)]="empleado.genero"
                 [options]="generos"
                 placeholder="Seleccionar un género"
                 emptyMessage="No hay género disponible"
@@ -340,7 +322,7 @@
                 Tipo Pago
               </label>
               <p-dropdown
-                [(ngModel)]="newEmpleado.tipoPago"
+                [(ngModel)]="empleado.tipoPago"
                 [options]="tipoPago"
                 placeholder="Seleccionar un tipo de pago"
                 emptyMessage="No hay tipos de pago disponibles"
@@ -364,127 +346,295 @@
               </label>
               <textarea
                 name="observaciones"
-                [(ngModel)]="newEmpleado.observaciones"
-                [readOnly]="busquedaEmpleado"
+                [(ngModel)]="empleado.observaciones"
                 type="text"
                 id="input-group-1"
                 class="w-full resize-none h-20 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out"
                 placeholder="Sin Observaciones"
               ></textarea>
             </span>
+            <span class="w-full">
+              <button
+                (click)="updateEmpleados()"
+                pButton
+                type="button"
+                label="Actualizar"
+                class="flex justify-center gap-3 border py-2 px-4 hover:bg-green-600 transition-all duration-300 rounded-lg ease-in-out focus:outline-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-device-floppy"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
+                  />
+                  <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                  <path d="M14 4l0 4l-6 0l0 -4" />
+                </svg>
+              </button>
+            </span>
           </div>
         </fieldset>
       </main>
+      }
     </section>
   </div>
-  <p-overlayPanel #opActualizarImagen>
-    <ng-template pTemplate="content">
-      <main class="flex flex-col gap-3">
-        <div class="flex flex-col items-center justify-center w-full gap-3">
-          @if (fileUpload.files?.[0]) { Archivo seleccionado:
-          {{ getFirstNameOfFile(fileUpload.files) }}
-          }
-          <label
-            for="dropzone-file"
-            class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg cursor-pointer bg-gray-700 border-gray-600 hover:border-gray-500 hover:bg-gray-600"
-          >
-            <div
-              class="flex flex-col items-center justify-center pt-5 pb-6 px-3"
-            >
-              <svg
-                class="w-8 h-8 mb-4 text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 16"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                />
-              </svg>
-              <p class="mb-2 text-sm text-gray-400">
-                <span class="font-semibold">Clic para subir</span>
-                o arrastra y suelta una imagen
-              </p>
-              <p class="text-xs text-gray-400">
-                JPEG, JPG, PNG (MAX. 800x400px)
-              </p>
-            </div>
-            <input id="dropzone-file" #fileUpload type="file" class="hidden" />
-          </label>
-        </div>
-        @if (fileUpload.files?.[0]) {
-        <button
-          (click)="updateImageEmpleado(fileUpload.files?.[0])"
-          class="bg-appPrimary-400 p-1 rounded-xl flex gap-3 justify-center"
-        >
-          Subir
-        </button>
-        }
-      </main>
-    </ng-template>
-  </p-overlayPanel>
-  <footer class="flex items-center justify-end">
-    @if(!busquedaEmpleado){
-      <button
-        (click)="guardarEmpleado()"
-        pButton
-        type="button"
-        label="Guardar"
-        class="flex justify-center gap-3 border py-2 px-4 hover:bg-green-600 transition-all duration-300 rounded-lg ease-in-out focus:outline-none"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="icon icon-tabler icon-tabler-device-floppy"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
-          />
-          <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-          <path d="M14 4l0 4l-6 0l0 -4" />
-        </svg>
-      </button>
-    }@else if(empleado){
-      <button
-      (click)="updateEmpleados()"
-      pButton
-      type="button"
-      label="Actualizar"
-      class="flex justify-center gap-3 border py-2 px-4 hover:bg-green-600 transition-all duration-300 rounded-lg ease-in-out focus:outline-none"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="icon icon-tabler icon-tabler-device-floppy"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        fill="none"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path
-          d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
-        />
-        <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-        <path d="M14 4l0 4l-6 0l0 -4" />
-      </svg>
-    </button>
-    }
-  </footer>
 </main>
+
+<!-- ! OVERLAYS PANEL -->
+<p-overlayPanel #opActualizarImagen>
+  <ng-template pTemplate="content">
+    <main class="flex flex-col gap-3">
+      <div class="flex flex-col items-center justify-center w-full gap-3">
+        @if (fileUpload.files?.[0]) { Archivo seleccionado:
+        {{ getFirstNameOfFile(fileUpload.files) }}
+        }
+        <label
+          for="dropzone-file"
+          class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg cursor-pointer bg-gray-700 border-gray-600 hover:border-gray-500 hover:bg-gray-600"
+        >
+          <div class="flex flex-col items-center justify-center pt-5 pb-6 px-3">
+            <svg
+              class="w-8 h-8 mb-4 text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p class="mb-2 text-sm text-gray-400">
+              <span class="font-semibold">Clic para subir</span>
+              o arrastra y suelta una imagen
+            </p>
+            <p class="text-xs text-gray-400">JPEG, JPG, PNG (MAX. 800x400px)</p>
+          </div>
+          <input id="dropzone-file" #fileUpload type="file" class="hidden" />
+        </label>
+      </div>
+      @if (fileUpload.files?.[0]) {
+      <button
+        (click)="updateImageEmpleado(fileUpload.files?.[0])"
+        class="bg-appPrimary-400 p-1 rounded-xl flex gap-3 justify-center"
+      >
+        Subir
+      </button>
+      }
+    </main>
+  </ng-template>
+</p-overlayPanel>
+
+<p-dialog [(visible)]="visibleModalNuevoEmpleado" [modal]="true">
+  <ng-template pTemplate="headless">
+    <main class="bg-appPrimary-900 p-3 rounded-lg">
+      <header class="flex justify-between items-center gap-3">
+        <h1 class="text-lg font-bold text-appPrimary-200">Crear</h1>
+        <button
+          (click)="visibleModalNuevoEmpleado = false"
+          class="rounded-full border p-1 hover:bg-red-500 hover:border-red-200 transition-all duration-300 ease-in-out focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-4 icon icon-tabler icon-tabler-x"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+          </svg>
+        </button>
+      </header>
+      <section class="mt-3 p-2 flex-col gap-3 grid grid-cols-2">
+        <span class="flex flex-col gap-1 w-full">
+          <label for="nombre" class="text-sm text-appPrimary-300">
+            Nombres:
+          </label>
+          <input
+            id="nombre"
+            type="text"
+            [(ngModel)]="newEmpleado.nombre"
+            class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            placeholder="Juan"
+          />
+        </span>
+        <span class="flex flex-col gap-1 w-full">
+          <label for="apellido" class="text-sm text-appPrimary-300">
+            Apellidos:
+          </label>
+          <input
+            id="apellido"
+            type="text"
+            [(ngModel)]="newEmpleado.apellido"
+            class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            placeholder="Martinez"
+          />
+        </span>
+
+        <span class="flex flex-col gap-1 w-full">
+          <label for="email" class="text-sm text-appPrimary-300">
+            Email:
+          </label>
+          <input
+            id="email"
+            type="mail"
+            [(ngModel)]="newEmpleado.email"
+            class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            placeholder="user@ceutec.edu"
+          />
+        </span>
+
+        <span class="flex flex-col gap-1 w-full">
+          <label for="telefono" class="text-sm text-appPrimary-300">
+            Teléfono:
+          </label>
+          <p-inputMask
+            id="telefono"
+            mask="+504 9999-9999"
+            [(ngModel)]="newEmpleado.telefono"
+            placeholder="+504 8828-5038"
+            class="*:p-0 *:bg-transparent *:ring-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+          ></p-inputMask>
+        </span>
+
+        <span class="flex flex-col gap-1 w-full">
+          <label for="alias" class="text-sm text-appPrimary-300">
+            Alias:
+          </label>
+          <input
+            id="alias"
+            type="text"
+            [(ngModel)]="newEmpleado.alias"
+            class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            placeholder="juanmartinez09"
+          />
+        </span>
+
+        <span class="flex flex-col gap-1 w-full">
+          <label for="password" class="text-sm text-appPrimary-300">
+            Password:
+          </label>
+          <input
+            id="password"
+            type="password"
+            [(ngModel)]="newEmpleado.password"
+            class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            placeholder="••••••••••••"
+          />
+        </span>
+        <span class="flex flex-col gap-1 w-full">
+          <label for="salario" class="text-sm text-appPrimary-300">
+            Salario:
+          </label>
+          <input
+            id="salario"
+            type="number"
+            min="0"
+            [(ngModel)]="newEmpleado.salario"
+            class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            placeholder="8000.00"
+          />
+        </span>
+        <span class="flex flex-col gap-1 w-full">
+          <label for="puesto" class="text-sm text-appPrimary-300">
+            Puesto:
+          </label>
+          <p-dropdown
+            id="puesto"
+            [options]="puestos"
+            [(ngModel)]="newEmpleado.idPuesto"
+            placeholder="Seleccionar un puesto"
+            emptyMessage="No hay puestos disponibles"
+            appendTo="body"
+            [filter]="true"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+            optionValue="id"
+          ></p-dropdown>
+        </span>
+        <span class="flex flex-col gap-1 w-full">
+          <label for="genero" class="text-sm text-appPrimary-300">
+            Genero:
+          </label>
+          <p-dropdown
+            id="genero"
+            [options]="generos"
+            [(ngModel)]="newEmpleado.idGenero"
+            placeholder="Seleccionar un género"
+            emptyMessage="No hay generos disponibles"
+            appendTo="body"
+            [filter]="true"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+            optionValue="id"
+          ></p-dropdown>
+        </span>
+        <span class="flex flex-col gap-1 w-full">
+          <label for="pago" class="text-sm text-appPrimary-300"> Pago: </label>
+          <p-dropdown
+            id="pago"
+            [options]="tipoPago"
+            [(ngModel)]="newEmpleado.idTipoPago"
+            placeholder="Seleccionar un tipo de pago"
+            emptyMessage="No hay tipos de pago disponibles"
+            appendTo="body"
+            [filter]="true"
+            styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+            optionLabel="descripcion"
+            optionValue="id"
+          ></p-dropdown>
+        </span>
+        <span class="flex flex-col gap-1 w-full justify-end">
+          <button
+            (click)="crearEmpleado()"
+            pButton
+            type="button"
+            label="Guardar"
+            class="flex justify-center gap-3 border py-1.5 px-4 hover:bg-green-600 transition-all duration-300 rounded-lg ease-in-out focus:outline-none"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-device-floppy"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"
+              />
+              <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+              <path d="M14 4l0 4l-6 0l0 -4" />
+            </svg>
+          </button>
+        </span>
+      </section>
+    </main>
+  </ng-template>
+</p-dialog>
