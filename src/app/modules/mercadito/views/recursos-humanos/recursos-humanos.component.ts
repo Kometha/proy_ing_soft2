@@ -124,6 +124,7 @@ export class RecursosHumanosView {
     }
     this.proySrv.EMPLEADOS.crearEmpleado(this.newEmpleado).subscribe(() => {
       this.alerta.showSuccess('Empleado creado!');
+      this.formValido = true;
       this.obtenerEmpleados();
     });
   }
@@ -183,6 +184,7 @@ export class RecursosHumanosView {
       updatedEmpleado: updatedEmpleado,
     }).subscribe(() => {
       if (this.marcarComoDirty()) {
+        this.formValido = true;
         this.alerta.showSuccess('Empleado actualizado!');
       }
       this.obtenerEmpleados();
