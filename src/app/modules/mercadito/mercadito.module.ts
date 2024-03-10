@@ -14,6 +14,7 @@ import { MercadeoView } from './views/mercadeo/mercadeo.component';
 import { VentasView } from './views/ventas/ventas.component';
 import { CardProductoComponent } from './views/ventas/components/card-producto/card-producto.component';
 import { CardProductoCarritoComponent } from './views/ventas/components/card-producto-carrito/card-producto-carrito.component';
+import { GenerarCompraView } from './views/compras/components/generar-compra/generar-compra.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CardProductoCarritoComponent } from './views/ventas/components/card-pro
     ComprasView,
     MercadeoView,
     VentasView,
+    GenerarCompraView,
 
     // ! Components
     HeaderComponent,

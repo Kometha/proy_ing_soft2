@@ -8,6 +8,7 @@ import { MercadeoView } from './views/mercadeo/mercadeo.component';
 import { ComprasView } from './views/compras/compras.component';
 import { VentasView } from './views/ventas/ventas.component';
 import { PermisosGuard } from './guards/permisos.guard';
+import { GenerarCompraView } from './views/compras/components/generar-compra/generar-compra.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,11 @@ const routes: Routes = [
   {
     path: 'ventas',
     component: VentasView,
+    canActivate: [SessionGuard, PermisosGuard],
+  },
+  {
+    path: 'generar-compra',
+    component: GenerarCompraView,
     canActivate: [SessionGuard, PermisosGuard],
   },
 
