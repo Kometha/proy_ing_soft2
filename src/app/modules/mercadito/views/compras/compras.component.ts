@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Proveedor } from '../../interfaces/proveedor';
+import { Marca, TipoUnidad } from '../../interfaces/misc-types';
+import { Producto } from '../../interfaces/producto';
+import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
 
 @Component({
   selector: 'app-compras',
@@ -22,9 +25,36 @@ export class ComprasView {
     { id: 12, descripcion: 'Proveedor 12 ' },
   ];
 
-  constructor(private router: Router) {}
+  marcas: Marca[] = [];
+  tipoUnidades: TipoUnidad[] = [];
+  productos: Producto[] = [];
+
+
+  constructor(private router: Router, private pryIngSoftService: ProyIngSoftService) {
+    this.getProductos();
+    this.getUnidades();
+    this.getMarcas();
+  }
 
   visibleModalMantProducto = false;
   visibleModalIngresarProducto = false;
   visibleModalGenerarCompra = false;
+
+  getProductos() {
+    this.pryIngSoftService.PRODUCTOS.getProductos().subscribe((res) => {
+      this.productos = res;
+    });
+  }
+
+  getUnidades() {
+    this.pryIngSoftService.TIPOS_O_FORMAS.getTiposUnidades().subscribe((res) => {
+      this.tipoUnidades = res;
+    });
+  }
+
+  getMarcas() {
+    this.pryIngSoftService.MARCAS.getMarcas().subscribe((res) => {
+      this.marcas = res;
+    });
+  }
 }

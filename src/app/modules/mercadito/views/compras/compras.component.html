@@ -9,6 +9,7 @@
         <button
           type="button"
           class="focus:outline-none text-white bg-appPrimary-700 hover:bg-appPrimary-600 focus:ring-4 focus:ring-appPrimary-200 font-medium rounded-lg text-sm px-3 py-1.5 transition-all duration-300 ease-in-out hover:shadow-lg"
+          (click)="visibleModalIngresarProducto = true"
         >
           Ingresar
         </button>
@@ -39,13 +40,13 @@
         <tbody class="text-base">
           <tr class="border-b bg-gray-800 border-gray-700 hover:bg-gray-600">
             <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-              Apple MacBook Pro 17"
+              Maní Japonés
             </th>
-            <td class="px-6 py-4">Silver</td>
-            <td class="px-6 py-4">Laptop</td>
-            <td class="px-6 py-4">Yes</td>
-            <td class="px-6 py-4">Yes</td>
-            <td class="px-6 py-4">3.0 lb.</td>
+            <td class="px-6 py-4">Apple</td>
+            <td class="px-6 py-4">San Pedro Sula</td>
+            <td class="px-6 py-4">Libras</td>
+            <td class="px-6 py-4">30</td>
+            <td class="px-6 py-4">Agotado</td>
             <td class="flex items-center px-6 py-4">
               <div class="flex items-center">
                 <p-checkbox value="YourValue" inputId="id"></p-checkbox>
@@ -285,5 +286,158 @@
         </main>
       </ng-template>
     </p-dialog>
+
+    <p-dialog [(visible)]="visibleModalIngresarProducto" [modal]="true">
+      <ng-template pTemplate="headless">
+        <main class="bg-appPrimary-900 p-3 rounded-lg">
+          <header class="flex justify-between items-center gap-3">
+            <button
+              class="rounded-full border p-1 hover:bg-red-500 hover:border-red-200 transition-all duration-300 ease-in-out focus:outline-none"
+              (click)="visibleModalIngresarProducto = false"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="size-4 icon icon-tabler icon-tabler-x"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M18 6l-12 12" />
+                <path d="M6 6l12 12" />
+              </svg>
+            </button>
+          </header>
+
+          <section class="mt-3 p-2 flex-col gap-3 grid grid-cols-2">
+            <span class="flex flex-col gap-1 w-full">
+              <label for="producto" class="text-sm text-appPrimary-300">
+                Producto:
+              </label>
+              <p-dropdown
+                id="productos"
+                [options]="productos"
+                placeholder="Seleccionar un producto"
+                emptyMessage="No hay productos disponibles"
+                appendTo="body"
+                [filter]="true"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+                optionValue="id"
+              ></p-dropdown>
+            </span>
+            <span class="flex flex-col gap-1 w-full">
+              <label for="apellido" class="text-sm text-appPrimary-300">
+                Unidad:
+              </label>
+              <p-dropdown
+                id="tipoUnidades"
+                [options]="tipoUnidades"
+                placeholder="Seleccionar una unidad"
+                emptyMessage="No hay unidades disponibles"
+                appendTo="body"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+                optionValue="id"
+              ></p-dropdown>
+            </span>
+
+            <span class="flex flex-col gap-1 w-full">
+              <label for="email" class="text-sm text-appPrimary-300">
+                Marca:
+              </label>
+              <p-dropdown
+                id="marcas"
+                [options]="marcas"
+                placeholder="Seleccionar una marca"
+                [filter]="true"
+                emptyMessage="No hay marcas disponibles"
+                appendTo="body"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+                optionValue="id"
+              ></p-dropdown>
+            </span>
+
+            <span class="flex flex-col gap-1 w-full">
+              <label for="telefono" class="text-sm text-appPrimary-300">
+                Cantidad:
+              </label>
+              <input
+                id="cantidad"
+                type="number"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+              />
+            </span>
+
+            <span class="flex flex-col gap-1 w-full">
+              <label for="alias" class="text-sm text-appPrimary-300">
+                Sucursal
+              </label>
+              <p-dropdown
+                id="sucursales"
+                [options]="marcas"
+                placeholder="Seleccionar una sucursal"
+                [filter]="true"
+                emptyMessage="No hay sucursales disponibles"
+                appendTo="body"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+                optionValue="id"
+              ></p-dropdown>
+            </span>
+
+            <span class="flex flex-col gap-1 w-full">
+              <label for="password" class="text-sm text-appPrimary-300">
+                Estado:
+              </label>
+              <p-dropdown
+                id="marcas"
+                [options]="marcas"
+                placeholder="Seleccionar un estado"
+                [filter]="true"
+                emptyMessage="No hay marcas disponibles"
+                appendTo="body"
+                styleClass="p-0 *:p-0 bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                optionLabel="descripcion"
+                optionValue="id"
+              ></p-dropdown>
+            </span>
+          </section>
+          <div class="flex justify-center mt-3">
+            <button
+              pButton
+              type="button"
+              label="Agregar"
+              class="flex justify-center gap-3 border py-1.5 px-4 hover:bg-green-600 transition-all duration-300 rounded-lg ease-in-out focus:outline-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-plus"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 5l0 14" />
+                <path d="M5 12l14 0" />
+              </svg>
+            </button>
+          </div>
+        </main>
+      </ng-template>
+    </p-dialog>
   </body>
 </main>
+
+<p-toast></p-toast>
