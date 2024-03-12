@@ -46,6 +46,7 @@
             pInputText
             id="emailOrUsername"
             [(ngModel)]="emailOrAlias"
+            autocomplete="off"
             required
             name="usuario"
             class="bg-gray-800 border border-gray-300 text-gray-200 text-sm rounded-lg block w-full ps-10 p-2.5 focus:bg-gray-600 focus:border-gray-700 transition-all duration-300 ease-in-out"
@@ -89,6 +90,7 @@
             id="pass"
             [(ngModel)]="password"
             required
+            autocomplete="off"
             name="contrasenia"
             (keyup.enter)="iniciarSesion()"
             class="bg-gray-800 border border-gray-300 text-gray-200 text-sm rounded-lg block w-full ps-10 p-2.5 focus:bg-gray-600 focus:border-gray-700 transition-all duration-300 ease-in-out"

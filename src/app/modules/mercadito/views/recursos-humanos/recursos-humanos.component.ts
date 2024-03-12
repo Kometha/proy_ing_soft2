@@ -147,7 +147,7 @@ export class RecursosHumanosView {
   handleClickInhabilitado() {
     if (!this.empleado) return this.alerta.showWarn('Seleccione un empleado');
 
-    this.empleado.inhabilitado = this.empleado.inhabilitado;
+    this.empleado.inhabilitado = !this.empleado.inhabilitado;
     this.updateEmpleados();
   }
 
@@ -165,6 +165,9 @@ export class RecursosHumanosView {
       salario,
       tipoPago: { id: idTipoPago },
       id,
+      password,
+      observaciones,
+      inhabilitado,
     } = this.empleado;
 
     const updatedEmpleado: EmpleadoCreate = {
@@ -177,7 +180,9 @@ export class RecursosHumanosView {
       alias,
       salario,
       idTipoPago,
-      password: this.newPassword,
+      password,
+      observaciones,
+      inhabilitado,
     };
     this.proySrv.EMPLEADOS.updateEmpleado({
       id,

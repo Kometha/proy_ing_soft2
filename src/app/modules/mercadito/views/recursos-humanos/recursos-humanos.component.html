@@ -274,6 +274,27 @@
                 for="input-group-1"
                 class="block mb-2 text-sm font-medium text-appPrimary-200"
               >
+                Contraseña
+              </label>
+              <input
+                name="password"
+                [(ngModel)]="empleado.password"
+                type="text"
+                id="input-group-1"
+                class="bg-appPrimary-800 border border-appPrimary-300 text-appPrimary-100 text-sm rounded-lg p-2 outline-none focus:ring-2 focus:ring-appPrimary-400 transition-all duration-200 ease-in-out w-full"
+                placeholder="••••••••••••••"
+              />
+              @if(!formValido){
+              <div class="text-red-500">
+                <p>*Debe rellenar este campo</p>
+              </div>
+              }
+            </span>
+            <span class="w-full">
+              <label
+                for="input-group-1"
+                class="block mb-2 text-sm font-medium text-appPrimary-200"
+              >
                 Puesto
               </label>
               <p-dropdown

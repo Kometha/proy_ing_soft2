@@ -8,6 +8,7 @@ export interface Empleado {
   email: string;
   telefono: string;
   alias: string;
+  password: string;
   salario: number;
   inhabilitado: boolean;
   observaciones: string;
@@ -28,4 +29,6 @@ export interface EmpleadoCreate {
   password: string;
   salario: number;
   idTipoPago: number;
+  observaciones?: string;
+  inhabilitado?: boolean;
 }
