@@ -170,6 +170,88 @@
   </section>
 </main>
 
+<p-dialog [visible]="visibleModalVerFacturas" [modal]="true">
+  <ng-template pTemplate="headless">
+    <main class="bg-appPrimary-900 p-3 rounded-lg">
+      <header class="flex justify-between items-center gap-3">
+        <h1 class="text-lg font-bold text-appPrimary-200">Facturas</h1>
+        <button
+          (click)="visibleModalVerFacturas = !visibleModalVerFacturas"
+          class="rounded-full border p-1 hover:bg-red-500 hover:border-red-200 transition-all duration-300 ease-in-out focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-4 icon icon-tabler icon-tabler-x"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+          </svg>
+        </button>
+      </header>
+      <section class="mt-3 flex gap-4">
+        <div class="relative overflow-x-auto">
+          <table
+            class="w-full text-sm text-left rtl:text-right text-appPrimary-400"
+          >
+            <thead
+              class="text-xs uppercase bg-appPrimary-700 text-appPrimary-400"
+            >
+              <tr>
+                <th scope="col" class="px-6 py-3">Fecha</th>
+                <th scope="col" class="px-6 py-3">Cliente</th>
+                <th scope="col" class="px-6 py-3">Total</th>
+                <th scope="col" class="px-6 py-3">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (factura of facturas; track $index) {
+              <tr class="border-b bg-appPrimary-800 border-appPrimary-700">
+                <th
+                  scope="row"
+                  class="px-6 py-4 font-medium whitespace-nowrap text-white"
+                >
+                  {{ factura.createdAt | date : "dd/MM/yyyy" }}
+                </th>
+                <td class="px-6 py-4">
+                  {{ factura.cliente.nombreCompleto }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ factura.total }}
+                </td>
+                <td class="px-6 py-4">
+                  <button
+                    (click)="verFactura(factura)"
+                    class="bg-appPrimary-500 text-appPrimary-200 font-bold px-3 py-1 rounded-lg hover:bg-appPrimary-400 hover:text-appPrimary-800 transition-all duration-300 ease-in-out outline-none"
+                  >
+                    Ver
+                  </button>
+                </td>
+              </tr>
+
+              } @empty {
+              <tr>
+                <td class="text-appPrimary-200 text-center" colspan="4">
+                  No hay facturas
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </ng-template>
+</p-dialog>
+
 <p-dialog [(visible)]="visibleModalFacturar" [modal]="true">
   <ng-template pTemplate="headless">
     <main class="bg-appPrimary-900 p-3 rounded-lg">

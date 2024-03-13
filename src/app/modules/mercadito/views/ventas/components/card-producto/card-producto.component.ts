@@ -28,6 +28,10 @@ export class CardProductoComponent {
     return `N/A`;
   }
 
+  getInventarioProducto(producto: Producto) {
+    return producto.inventario.reduce((acc, inv) => acc + inv.cantidad, 0);
+  }
+
   handleClickAddToCart() {
     this.clickAddToCart.emit(this.producto);
   }

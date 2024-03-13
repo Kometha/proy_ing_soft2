@@ -8,6 +8,7 @@ import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
 import { CART_KEY } from '../../../../config/config';
 import { Cliente } from '../../interfaces/cliente';
 import { CreateFactura } from '../../interfaces/create-factura';
+import { Factura } from '../../interfaces/factura';
 
 @Component({
   selector: 'ventas-view',
@@ -37,12 +38,17 @@ export class VentasView {
     telefono: '',
   };
 
-  visibleModalFacturar = true;
+  visibleModalFacturar = false;
   visibleModalCliente = false;
+
+  visibleModalVerFacturas = false;
+
+  facturas: Factura[] = [];
 
   constructor(private pryIngSoftService: ProyIngSoftService) {
     this.getProductos();
     this.getClientes();
+    this.getFacturas();
     this.restoreCarrito();
   }
 
@@ -64,10 +70,20 @@ export class VentasView {
     });
   }
 
+  getFacturas() {
+    this.pryIngSoftService.FACTURAS.getFacturas().subscribe((response) => {
+      this.facturas = response;
+    });
+  }
+
   selectView(view: ProductoView) {
     this.viewSeleccionada = view;
     this.viewSeleccionadaBkp = structuredClone(view);
     this.searchInput = '';
+  }
+
+  verFactura(factura: Factura) {
+    console.log(factura);
   }
 
   searchProductos() {
@@ -297,6 +313,7 @@ export class VentasView {
           this.setCarrito();
           this.visibleModalFacturar = false;
           this.getClientes();
+          this.getFacturas();
           this.getProductos();
           this.visibleSideBarCarrito = false;
           this.nuevoCliente = {

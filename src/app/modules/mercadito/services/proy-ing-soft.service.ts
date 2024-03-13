@@ -425,5 +425,18 @@ export class ProyIngSoftService {
           catchError(this.handleError)
         );
     },
+    getFacturas: () => {
+      const url = `${URL_BASE}/facturas`;
+      return this.http.get<ApiResponse<Factura[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
   };
 }

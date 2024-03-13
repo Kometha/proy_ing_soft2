@@ -20,9 +20,20 @@
     </small>
   </section>
   <footer class="flex justify-between items-end">
-    <small class="text-appPrimary-100">
-      {{ getPreciosProducto(producto) }}
-    </small>
+    <div class="flex gap-2">
+      <small class="text-appPrimary-100">
+        {{ getPreciosProducto(producto) }}
+      </small>
+      <small
+        class="{{
+          getInventarioProducto(producto) < 50
+            ? 'text-red-200 font-bold'
+            : 'text-appPrimary-100'
+        }}"
+      >
+        Qty: {{ getInventarioProducto(producto) }}
+      </small>
+    </div>
     <button
       (click)="handleClickAddToCart()"
       class="bg-appPrimary-300 text-appPrimary-700 font-bold px-3 py-1 rounded-lg hover:bg-appPrimary-800 hover:text-appPrimary-300 hover:scale-110 transition-all duration-300 ease-in-out active:scale-75 outline-none"
