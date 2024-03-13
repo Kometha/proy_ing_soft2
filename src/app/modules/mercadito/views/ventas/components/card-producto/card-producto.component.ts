@@ -13,9 +13,11 @@ export class CardProductoComponent {
   @Output() clickAddToCart = new EventEmitter<Producto>();
 
   getUrlImageProducto(producto: Producto) {
-    return `${IMAGENES_PRODUCTO_URL_BASE}${
-      producto.id
-    }.jpeg?pseudo=${Date.now()}`;
+    const pseudo = Date.now();
+    const agregarPseudo = false;
+    return `${IMAGENES_PRODUCTO_URL_BASE}${producto.id}.jpeg${
+      agregarPseudo ? `?pseudo=${pseudo}` : ''
+    }`;
   }
 
   getPreciosProducto(producto: Producto) {

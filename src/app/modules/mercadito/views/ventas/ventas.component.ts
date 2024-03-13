@@ -101,21 +101,38 @@ export class VentasView {
     this.searchInput = '';
   }
 
+  anularFactura(factura: Factura) {
+    this.pryIngSoftService.FACTURAS.anularFactura(factura.id).subscribe(
+      (res) => {
+        if (res) {
+          this.getFacturas();
+        }
+      }
+    );
+  }
+
   verFactura(factura: Factura) {
     const {
+      nula,
       id,
       createdAt,
+      empleado,
       formaPago: { descripcion: tipoPago },
-      cliente: { dni, nombreCompleto },
+      cliente: { dni, nombreCompleto, telefono },
     } = factura;
     generarFactura({
       cliente: {
         identificacion: dni,
         nombre: nombreCompleto,
+        telefono,
       },
       factura: {
         id,
         createdAt,
+        nula,
+      },
+      empleado: {
+        nombre: `${empleado.nombre} ${empleado.apellido}`,
       },
       tipoPago,
       productos: factura.detalle.map((productoFactura) => ({

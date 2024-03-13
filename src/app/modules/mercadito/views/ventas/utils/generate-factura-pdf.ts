@@ -13,9 +13,11 @@ export const generarFactura = (props: {
   factura: {
     id: number;
     createdAt: Date;
+    nula: boolean;
   };
   cliente: {
     nombre: string;
+    telefono: string;
     identificacion: string;
   };
   productos: {
@@ -23,9 +25,12 @@ export const generarFactura = (props: {
     cantidad: number;
     precio: number;
   }[];
+  empleado: {
+    nombre: string;
+  };
   tipoPago: string;
 }) => {
-  const { factura, cliente, tipoPago, productos } = props;
+  const { factura, cliente, tipoPago, productos, empleado } = props;
 
   const subtotal = productos.reduce(
     (acc, producto) => acc + producto.cantidad * producto.precio,
@@ -37,105 +42,384 @@ export const generarFactura = (props: {
 
   const total = subtotal + impuesto;
 
-  const definicionParaPdfMake: TDocumentDefinitions = {
+  const dd: TDocumentDefinitions = {
     content: [
       {
-        image: logoBase64,
-        width: 200,
-        height: 70,
-      },
-
-      {
-        text: 'FACTURA',
-        style: 'header',
-        alignment: 'left',
-        margin: [0, 0, 0, 5], // Margin bottom for spacing
-      },
-      `#YZYTM-${factura.id}\n\n`,
-      {
-        table: {
-          widths: ['*', '*'],
-          body: [
-            [{ text: 'DNI:', bold: true }, cliente.identificacion],
-            [{ text: 'Cliente:', bold: true }, cliente.nombre],
-            [{ text: 'Tipo Pago:', bold: true }, tipoPago],
+        columns: [
+          {
+            image: logoBase64,
+            width: 150,
+          },
+          [
+            {
+              text: 'Factura',
+              color: '#333333',
+              // width: '*',
+              fontSize: 28,
+              bold: true,
+              alignment: 'right',
+              margin: [0, 0, 0, 15],
+            },
+            {
+              stack: [
+                {
+                  columns: [
+                    {
+                      text: 'Factura No.',
+                      color: '#aaaaab',
+                      bold: true,
+                      width: '*',
+                      fontSize: 12,
+                      alignment: 'right',
+                    },
+                    {
+                      text: `YZYTM-${factura.id}`,
+                      bold: true,
+                      color: '#333333',
+                      fontSize: 12,
+                      alignment: 'right',
+                      width: 100,
+                    },
+                  ],
+                },
+                {
+                  columns: [
+                    {
+                      text: 'Fecha',
+                      color: '#aaaaab',
+                      bold: true,
+                      width: '*',
+                      fontSize: 12,
+                      alignment: 'right',
+                    },
+                    {
+                      text: `${new Date(factura.createdAt).toDateString()}`,
+                      bold: true,
+                      color: '#333333',
+                      fontSize: 12,
+                      alignment: 'right',
+                      width: 100,
+                    },
+                  ],
+                },
+                {
+                  columns: [
+                    {
+                      text: 'Estado',
+                      color: '#aaaaab',
+                      bold: true,
+                      fontSize: 12,
+                      alignment: 'right',
+                      width: '*',
+                    },
+                    {
+                      text: factura.nula ? 'ANULADA' : 'PAGADA',
+                      bold: true,
+                      fontSize: 14,
+                      alignment: 'right',
+                      color: factura.nula ? 'red' : 'green',
+                      width: 100,
+                    },
+                  ],
+                },
+              ],
+            },
           ],
+        ],
+      },
+      {
+        columns: [
+          {
+            text: 'De',
+            color: '#aaaaab',
+            bold: true,
+            fontSize: 14,
+            alignment: 'left',
+            margin: [0, 20, 0, 5],
+          },
+          {
+            text: 'A',
+            color: '#aaaaab',
+            bold: true,
+            fontSize: 14,
+            alignment: 'left',
+            margin: [0, 20, 0, 5],
+          },
+        ],
+      },
+      {
+        columns: [
+          {
+            text: `${empleado.nombre} \n Galope`,
+            bold: true,
+            color: '#333333',
+            alignment: 'left',
+          },
+          {
+            text: `${cliente.nombre}`,
+            bold: true,
+            color: '#333333',
+            alignment: 'left',
+          },
+        ],
+      },
+      {
+        columns: [
+          {
+            text: 'Datos',
+            color: '#aaaaab',
+            bold: true,
+            margin: [0, 7, 0, 3],
+          },
+          {
+            text: 'Datos',
+            color: '#aaaaab',
+            bold: true,
+            margin: [0, 7, 0, 3],
+          },
+        ],
+      },
+      {
+        columns: [
+          {
+            text: `Tienda Galope - La Quezada \n ${tipoPago}`,
+            style: 'invoiceBillingAddress',
+          },
+          {
+            text: `${cliente.identificacion} \n ${cliente.telefono} \n   HN`,
+            style: 'invoiceBillingAddress',
+          },
+        ],
+      },
+      '\n\n',
+      {
+        // width: '100%',
+        alignment: 'center',
+        text: `Factura No.  YZYTM-${factura.id}`,
+        bold: true,
+        margin: [0, 10, 0, 10],
+        fontSize: 15,
+      },
+      {
+        layout: {
+          defaultBorder: false,
+          hLineWidth: function () {
+            return 1;
+          },
+          vLineWidth: function () {
+            return 1;
+          },
+          hLineColor: function (i: number) {
+            if (i === 1 || i === 0) {
+              return '#bfdde8';
+            }
+            return '#eaeaea';
+          },
+          vLineColor: function () {
+            return '#eaeaea';
+          },
+          hLineStyle: function () {
+            // if (i === 0 || i === node.table.body.length) {
+            return null;
+            //}
+          },
+          // vLineStyle: function (i, node) { return {dash: { length: 10, space: 4 }}; },
+          paddingLeft: function () {
+            return 10;
+          },
+          paddingRight: function () {
+            return 10;
+          },
+          paddingTop: function () {
+            return 2;
+          },
+          paddingBottom: function () {
+            return 2;
+          },
+          fillColor: function () {
+            return '#fff';
+          },
         },
-        layout: 'noBorders',
-        margin: [0, 0, 0, 20], // Margin bottom for spacing
-      },
-      {
-        text: 'Detalles',
-        style: 'subheader',
-        margin: [0, 0, 0, 10], // Margin bottom for spacing
-      },
-      {
         table: {
           headerRows: 1,
           widths: ['*', 'auto', 'auto', 'auto'],
           body: [
             [
-              { text: 'Descripción', style: 'tableHeader' },
-              { text: 'Cantidad', style: 'tableHeader' },
-              { text: 'Precio', style: 'tableHeader' },
-              { text: 'Total', style: 'tableHeader' },
+              {
+                text: 'Producto',
+                fillColor: '#eaf2f5',
+                border: [false, true, false, true],
+                margin: [0, 5, 0, 5],
+                textTransform: 'uppercase',
+              },
+              {
+                text: 'Cantidad',
+                fillColor: '#eaf2f5',
+                border: [false, true, false, true],
+                margin: [0, 5, 0, 5],
+                textTransform: 'uppercase',
+              },
+              {
+                text: 'Precio Unitario',
+                fillColor: '#eaf2f5',
+                border: [false, true, false, true],
+                margin: [0, 5, 0, 5],
+                textTransform: 'uppercase',
+              },
+              {
+                text: 'Total',
+                border: [false, true, false, true],
+                alignment: 'right',
+                fillColor: '#eaf2f5',
+                margin: [0, 5, 0, 5],
+                textTransform: 'uppercase',
+              },
             ],
             ...productos.map((producto) => [
-              producto.nombre,
-              producto.cantidad,
-              `L.${producto.precio.toFixed(2)}`,
-              `L.${(producto.cantidad * producto.precio).toFixed(2)}`,
+              {
+                text: producto.nombre,
+                border: [false, false, false, true],
+                margin: [0, 5, 0, 5],
+                alignment: 'left',
+              },
+              {
+                text: producto.cantidad,
+                border: [false, false, false, true],
+                margin: [0, 5, 0, 5],
+                alignment: 'left',
+              },
+              {
+                text: `L. ${producto.precio.toFixed(2)}`,
+                border: [false, false, false, true],
+                margin: [0, 5, 0, 5],
+                alignment: 'left',
+              },
+              {
+                border: [false, false, false, true],
+                text: `L. ${(producto.cantidad * producto.precio).toFixed(2)}`,
+                fillColor: '#f5f5f5',
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+              },
             ]),
           ],
         },
-        margin: [0, 0, 0, 20], // Margin bottom for spacing
+      },
+      '\n',
+      '\n\n',
+      {
+        layout: {
+          defaultBorder: false,
+          hLineWidth: function () {
+            return 1;
+          },
+          vLineWidth: function () {
+            return 1;
+          },
+          hLineColor: function () {
+            return '#eaeaea';
+          },
+          vLineColor: function () {
+            return '#eaeaea';
+          },
+          hLineStyle: function () {
+            return null;
+          },
+          paddingLeft: function () {
+            return 10;
+          },
+          paddingRight: function () {
+            return 10;
+          },
+          paddingTop: function () {
+            return 3;
+          },
+          paddingBottom: function () {
+            return 3;
+          },
+          fillColor: function () {
+            return '#fff';
+          },
+        },
+        table: {
+          headerRows: 1,
+          widths: ['*', 'auto'],
+          body: [
+            [
+              {
+                text: 'Subtotal',
+                border: [false, true, false, true],
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+              },
+              {
+                border: [false, true, false, true],
+                text: `L. ${subtotal}`,
+                alignment: 'right',
+                fillColor: '#f5f5f5',
+                margin: [0, 5, 0, 5],
+              },
+            ],
+            [
+              {
+                text: 'Impuesto',
+                border: [false, false, false, true],
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+              },
+              {
+                text: `L. ${impuesto} - (15%)`,
+                border: [false, false, false, true],
+                fillColor: '#f5f5f5',
+                alignment: 'right',
+                margin: [0, 5, 0, 5],
+              },
+            ],
+            [
+              {
+                text: 'Total',
+                bold: true,
+                fontSize: 20,
+                alignment: 'right',
+                border: [false, false, false, true],
+                margin: [0, 5, 0, 5],
+              },
+              {
+                text: `L. ${total}`,
+                bold: true,
+                fontSize: 20,
+                alignment: 'right',
+                border: [false, false, false, true],
+                fillColor: '#f5f5f5',
+                margin: [0, 5, 0, 5],
+              },
+            ],
+          ],
+        },
+      },
+      '\n\n',
+      {
+        text: 'Notas',
+        style: 'notesTitle',
       },
       {
-        text: `Subtotal: L.${subtotal.toFixed(2)}`,
-        style: 'subtotalAmount',
-      },
-      {
-        text: `ISV: ${porcentajeImpuesto * 100}% - L.${impuesto.toFixed(2)}`,
-        style: 'subtotalAmount',
-      },
-      {
-        text: `Total: L.${total.toFixed(2)}`,
-        style: 'totalAmount',
-        margin: [0, 0, 0, 120], // Margin bottom for spacing
-      },
-
-      {
-        text: '"LA FACTURA ES UN BENEFICIO DE TODOS, ¡EXIJALA!"',
-        alignment: 'center',
-        italics: true,
+        text: 'LA FACTURA ES UN BENEFICIO DE TODOS, ¡EXIJALA!',
+        style: 'notesText',
       },
     ],
     styles: {
-      header: {
-        fontSize: 22,
+      notesTitle: {
+        fontSize: 10,
         bold: true,
+        margin: [0, 50, 0, 3],
       },
-      subheader: {
-        fontSize: 18,
-        bold: false,
+      notesText: {
+        fontSize: 10,
       },
-      tableHeader: {
-        bold: false,
-        fontSize: 13,
-        color: 'black',
-      },
-      subtotalAmount: {
-        fontSize: 14,
-        bold: true,
-        alignment: 'right',
-        margin: [0, 10, 0, 0], // Margin top for spacing
-      },
-      totalAmount: {
-        fontSize: 18,
-        bold: true,
-        alignment: 'right',
-        margin: [0, 10, 0, 0], // Margin top for spacing
-      },
+    },
+    defaultStyle: {
+      columnGap: 20,
+      //font: 'Quicksand',
     },
   };
 
@@ -158,7 +442,7 @@ export const generarFactura = (props: {
     // @ts-ignore
     pdfMake.fonts = fonts;
 
-    const pdf = createPdf(definicionParaPdfMake);
+    const pdf = createPdf(dd);
 
     pdf.open();
   } catch (error) {

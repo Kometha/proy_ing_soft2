@@ -452,5 +452,19 @@ export class ProyIngSoftService {
         catchError(this.handleError)
       );
     },
+    anularFactura: (id: number) => {
+      const url = `${URL_BASE}/facturas/${id}/anular`;
+      return this.http.patch<ApiResponse<Factura>>(url, { headers }).pipe(
+        map(({ isSuccess, message }) => {
+          if (!isSuccess) {
+            this.alerta.showWarn(message);
+            return;
+          }
+          this.alerta.showSuccess('Factura anulada correctamente');
+          return true;
+        }),
+        catchError(this.handleError)
+      );
+    },
   };
 }
