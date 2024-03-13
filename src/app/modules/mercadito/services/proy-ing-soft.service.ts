@@ -22,6 +22,8 @@ import {
   TipoUnidad,
 } from '../interfaces/misc-types';
 import { Cliente } from '../interfaces/cliente';
+import { CreateFactura } from '../interfaces/create-factura';
+import { Factura } from '../interfaces/factura';
 
 const URL_BASE = `${WEB_SERVICE}proyecto-is2`;
 let headers = new HttpHeaders(Header);
@@ -66,6 +68,12 @@ export class ProyIngSoftService {
       sessionStorage.removeItem(DATA_USER_KEY);
       this.PERMISOS.deletePermisos();
       this.ROUTING.goLogin();
+    },
+
+    getEmpleadoLogueado: () => {
+      return JSON.parse(
+        sessionStorage.getItem(DATA_USER_KEY) || '{}'
+      ) as Empleado;
     },
   };
 
@@ -241,7 +249,7 @@ export class ProyIngSoftService {
     },
     updateEmpleado: ({
       id,
-      updatedEmpleado
+      updatedEmpleado,
     }: {
       id: number;
       updatedEmpleado: EmpleadoCreate;
@@ -393,6 +401,25 @@ export class ProyIngSoftService {
               this.alerta.showWarn(message);
               return;
             }
+            return data;
+          }),
+          catchError(this.handleError)
+        );
+    },
+  };
+
+  FACTURAS = {
+    crearFactura: (factura: CreateFactura) => {
+      const url = `${URL_BASE}/facturas`;
+      return this.http
+        .post<ApiResponse<Factura>>(url, factura, { headers })
+        .pipe(
+          map(({ isSuccess, message, data }) => {
+            if (!isSuccess) {
+              this.alerta.showWarn(message);
+              return;
+            }
+            this.alerta.showSuccess('Factura creada correctamente');
             return data;
           }),
           catchError(this.handleError)

@@ -7,6 +7,7 @@ import {
 import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
 import { CART_KEY } from '../../../../config/config';
 import { Cliente } from '../../interfaces/cliente';
+import { CreateFactura } from '../../interfaces/create-factura';
 
 @Component({
   selector: 'ventas-view',
@@ -21,6 +22,8 @@ export class VentasView {
   searchInput = '';
   visibleSideBarCarrito = false;
   productosCarrito: ProductoCarrito[] = [];
+
+  empleadoLogueado = this.pryIngSoftService.LOGIN.getEmpleadoLogueado();
 
   clientes: Cliente[] = [];
   inputSearchCliente = '';
@@ -235,10 +238,6 @@ export class VentasView {
   }
 
   searchCliente() {
-    // La mascara es: 0000-0000-00000
-    // 15 caracteres
-    // 4-4-5
-    // Reemplazar los guiones y los guiones_bajos
     const str = this.inputSearchCliente.trim().toLowerCase();
     const strWithOutMask = str.replace(/-|_/g, '');
 
@@ -257,5 +256,60 @@ export class VentasView {
 
   handleClickCreateCliente() {
     if (this.inputSearchCliente.length !== 15) return;
+  }
+
+  facturar() {
+    const { nombreCompleto, telefono } =
+      this.clienteEncontrado ?? this.nuevoCliente;
+    const { id: idEmpleado } = this.empleadoLogueado;
+
+    const bodyFacturar: CreateFactura = {
+      cliente: {
+        dni: this.inputSearchCliente,
+        nombreCompleto,
+        telefono,
+      },
+      empleado: {
+        id: idEmpleado,
+      },
+      formaPago: {
+        id: 1,
+      },
+      productosFactura: this.productosCarrito.map((producto) => ({
+        idProducto: producto.producto.id,
+        idTipoUnidad: producto.tipoUnidad.id,
+        cantidad: producto.cantidad,
+        precioUnitario:
+          producto.producto.precios.find(
+            (p) => p.tipoUnidad === producto.tipoUnidad
+          )?.precio ?? 0,
+        subtotal:
+          producto.producto.precios.find(
+            (p) => p.tipoUnidad === producto.tipoUnidad
+          )?.precio ?? 0 * producto.cantidad,
+      })),
+    };
+
+    this.pryIngSoftService.FACTURAS.crearFactura(bodyFacturar).subscribe(
+      (res) => {
+        if (res) {
+          this.productosCarrito = [];
+          this.setCarrito();
+          this.visibleModalFacturar = false;
+          this.getClientes();
+          this.getProductos();
+          this.visibleSideBarCarrito = false;
+          this.nuevoCliente = {
+            id: 0,
+            createdAt: new Date(),
+            dni: '',
+            nombreCompleto: '',
+            telefono: '',
+          };
+          this.inputSearchCliente = '';
+          this.searchCliente();
+        }
+      }
+    );
   }
 }
