@@ -13,6 +13,7 @@ import { Producto } from '../interfaces/producto';
 import {
   Categoria,
   Familia,
+  FormaPago,
   Genero,
   Marca,
   Precio,
@@ -333,6 +334,19 @@ export class ProyIngSoftService {
     getTiposPago: () => {
       const url = `${URL_BASE}/tipo-pago`;
       return this.http.get<ApiResponse<TipoPago[]>>(url, { headers }).pipe(
+        map(({ message, data }) => {
+          if (!data) {
+            this.alerta.showWarn(message);
+            return [];
+          }
+          return data;
+        }),
+        catchError(this.handleError)
+      );
+    },
+    getFormasPago: () => {
+      const url = `${URL_BASE}/forma-pago`;
+      return this.http.get<ApiResponse<FormaPago[]>>(url, { headers }).pipe(
         map(({ message, data }) => {
           if (!data) {
             this.alerta.showWarn(message);

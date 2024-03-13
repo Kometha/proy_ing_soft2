@@ -1,4 +1,4 @@
-import { Inventario, Marca, Precio, TipoUnidad } from './misc-types';
+import { Inventario, Marca, Precio, Subclase, TipoUnidad } from './misc-types';
 
 export interface Producto {
   id: number;

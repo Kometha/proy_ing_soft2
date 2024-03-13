@@ -9,6 +9,10 @@ export interface Puesto extends GeneralData {}
 export interface TipoPago extends GeneralData {}
 export interface Marca extends GeneralData {}
 export interface Tienda extends GeneralData {}
+export interface Puesto extends GeneralData {}
+export interface Genero extends GeneralData {}
+export interface TipoPago extends GeneralData {}
+export interface FormaPago extends GeneralData {}
 export interface TipoUnidad extends GeneralData {
   permiteDecimales: boolean;
   abreviacion: string;
@@ -34,35 +38,12 @@ export interface Familia extends GeneralData {
   codigoFamilia: string;
 }
 
-export interface Subclase {
-  id: number;
+export interface Subclase extends GeneralData {
   categoria: Categoria;
-  createdAt: Date;
-  descripcion: string;
   codigoSubclase: string;
 }
 
-export interface Categoria {
-  id: number;
+export interface Categoria extends GeneralData {
   familia: Familia;
-  createdAt: Date;
-  descripcion: string;
   codigoCategoria: string;
-}
-export interface Puesto {
-  id: number;
-  createdAt: Date;
-  descripcion: string;
-}
-
-export interface Genero{
-  id: number;
-  createdAt: Date;
-  descripcion: string;
-}
-
-export interface TipoPago{
-  id: number;
-  createdAt: Date;
-  descripcion: string;
 }

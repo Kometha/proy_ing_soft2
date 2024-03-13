@@ -9,6 +9,8 @@ import { CART_KEY } from '../../../../config/config';
 import { Cliente } from '../../interfaces/cliente';
 import { CreateFactura } from '../../interfaces/create-factura';
 import { Factura } from '../../interfaces/factura';
+import { generarFactura } from './utils/generate-factura-pdf';
+import { FormaPago } from '../../interfaces/forma-pago';
 
 @Component({
   selector: 'ventas-view',
@@ -23,6 +25,9 @@ export class VentasView {
   searchInput = '';
   visibleSideBarCarrito = false;
   productosCarrito: ProductoCarrito[] = [];
+
+  formasPago: FormaPago[] = [];
+  formaPagoSeleccionada?: FormaPago;
 
   empleadoLogueado = this.pryIngSoftService.LOGIN.getEmpleadoLogueado();
 
@@ -49,7 +54,8 @@ export class VentasView {
     this.getProductos();
     this.getClientes();
     this.getFacturas();
-    this.restoreCarrito();
+    this.getFormasPago();
+    // this.restoreCarrito();
   }
 
   getProductos() {
@@ -73,7 +79,20 @@ export class VentasView {
   getFacturas() {
     this.pryIngSoftService.FACTURAS.getFacturas().subscribe((response) => {
       this.facturas = response;
+      this.facturas = this.facturas.sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
     });
+  }
+
+  getFormasPago() {
+    this.pryIngSoftService.TIPOS_O_FORMAS.getFormasPago().subscribe(
+      (response) => {
+        this.formasPago = response;
+      }
+    );
   }
 
   selectView(view: ProductoView) {
@@ -83,7 +102,28 @@ export class VentasView {
   }
 
   verFactura(factura: Factura) {
-    console.log(factura);
+    const {
+      id,
+      createdAt,
+      formaPago: { descripcion: tipoPago },
+      cliente: { dni, nombreCompleto },
+    } = factura;
+    generarFactura({
+      cliente: {
+        identificacion: dni,
+        nombre: nombreCompleto,
+      },
+      factura: {
+        id,
+        createdAt,
+      },
+      tipoPago,
+      productos: factura.detalle.map((productoFactura) => ({
+        nombre: productoFactura.producto.descripcion,
+        cantidad: productoFactura.cantidad,
+        precio: productoFactura.precioUnitario,
+      })),
+    });
   }
 
   searchProductos() {
@@ -193,6 +233,9 @@ export class VentasView {
     if (!carrito) return;
 
     this.productosCarrito = JSON.parse(carrito);
+    console.log(this.productosCarrito);
+
+    this.getTotalCarrito();
   }
 
   setCarrito() {
@@ -278,6 +321,8 @@ export class VentasView {
     const { nombreCompleto, telefono } =
       this.clienteEncontrado ?? this.nuevoCliente;
     const { id: idEmpleado } = this.empleadoLogueado;
+    if (!this.formaPagoSeleccionada) return;
+    const { id: idFormaPago } = this.formaPagoSeleccionada;
 
     const bodyFacturar: CreateFactura = {
       cliente: {
@@ -289,7 +334,7 @@ export class VentasView {
         id: idEmpleado,
       },
       formaPago: {
-        id: 1,
+        id: idFormaPago,
       },
       productosFactura: this.productosCarrito.map((producto) => ({
         idProducto: producto.producto.id,
@@ -325,6 +370,7 @@ export class VentasView {
           };
           this.inputSearchCliente = '';
           this.searchCliente();
+          this.verFactura(res);
         }
       }
     );
