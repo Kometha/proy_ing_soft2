@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  host: 'https://api-2da-tarea-osman.onrender.com/',
+  host: 'https://allasenlinea.com:9191/',
 };
