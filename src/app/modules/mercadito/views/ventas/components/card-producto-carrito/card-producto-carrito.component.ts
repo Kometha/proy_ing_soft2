@@ -35,7 +35,7 @@ export class CardProductoCarritoComponent {
     );
 
     if (precio) {
-      return `L. ${precio.precio}`;
+      return `L. ${precio.precio.toFixed(2)}`;
     }
 
     return 'N/A';
@@ -51,7 +51,7 @@ export class CardProductoCarritoComponent {
     );
 
     if (precio) {
-      return `L. ${precio.precio * this.productoCarrito.cantidad}`;
+      return `L. ${(precio.precio * this.productoCarrito.cantidad).toFixed(2)}`;
     }
 
     return 'N/A';

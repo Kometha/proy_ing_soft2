@@ -121,6 +121,17 @@ export class MercadeoView {
     });
   }
 
+  getInventarioTotal(inv: number) {
+    const constante = 1.3;
+    return Math.floor(inv * constante);
+  }
+
+  getFechaVencimientoSegunInventario(inv: number) {
+    const fecha = new Date();
+    fecha.setDate(fecha.getDate() + inv);
+    return fecha;
+  }
+
   crearProducto() {
     const { descripcion, marca } = this.crearProductoProps;
     if (!marca) {

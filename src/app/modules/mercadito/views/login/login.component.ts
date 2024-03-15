@@ -9,18 +9,22 @@ import { AlertaService } from '../../../../services/alertas/alerta.service';
 export class LoginView {
   constructor(
     private proySrv: ProyIngSoftService,
-    private alerta: AlertaService,
+    private alerta: AlertaService
   ) {}
   emailOrAlias = '';
   password = '';
+  loading = false;
 
   iniciarSesion() {
     if (!this.emailOrAlias || !this.password) {
       return this.alerta.showWarn('Ingrese todos los campos');
     }
+    this.loading = true;
     this.proySrv.LOGIN.iniciarSesion(
       this.emailOrAlias,
       this.password
-    ).subscribe(() => {});
+    ).subscribe(() => {
+      this.loading = false;
+    });
   }
 }

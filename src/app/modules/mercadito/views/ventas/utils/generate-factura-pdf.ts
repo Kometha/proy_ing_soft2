@@ -21,6 +21,7 @@ export const generarFactura = (props: {
     identificacion: string;
   };
   productos: {
+    codigo: string;
     nombre: string;
     cantidad: number;
     precio: number;
@@ -242,9 +243,16 @@ export const generarFactura = (props: {
         },
         table: {
           headerRows: 1,
-          widths: ['*', 'auto', 'auto', 'auto'],
+          widths: ['auto', '*', 'auto', 'auto', 'auto'],
           body: [
             [
+              {
+                text: 'Codigo',
+                fillColor: '#eaf2f5',
+                border: [false, true, false, true],
+                margin: [0, 5, 0, 5],
+                textTransform: 'uppercase',
+              },
               {
                 text: 'Producto',
                 fillColor: '#eaf2f5',
@@ -276,6 +284,12 @@ export const generarFactura = (props: {
               },
             ],
             ...productos.map((producto) => [
+              {
+                text: producto.codigo,
+                border: [false, false, false, true],
+                margin: [0, 5, 0, 5],
+                alignment: 'left',
+              },
               {
                 text: producto.nombre,
                 border: [false, false, false, true],
@@ -368,7 +382,7 @@ export const generarFactura = (props: {
                 margin: [0, 5, 0, 5],
               },
               {
-                text: `L. ${impuesto} - (15%)`,
+                text: `L. ${impuesto.toFixed(2)} - (15%)`,
                 border: [false, false, false, true],
                 fillColor: '#f5f5f5',
                 alignment: 'right',

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ProyIngSoftService } from '../../services/proy-ing-soft.service';
 import { Empleado, EmpleadoCreate } from '../../interfaces/empleado';
 import { Genero, Puesto, TipoPago } from '../../interfaces/misc-types';
@@ -12,6 +12,17 @@ const IMAGENES_EMPLEADO_URL_BASE = `${URL_BASE}/${IMAGES_FOLDERS.empleados}/`;
   templateUrl: './recursos-humanos.component.html',
 })
 export class RecursosHumanosView {
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    const isF2 = event.key === 'F2';
+    const isF8 = event.key === 'F8';
+    if (isF2) {
+      this.toggleModalVerEmpleados();
+    }
+    if (isF8) {
+      this.visibleModalNuevoEmpleado = !this.visibleModalNuevoEmpleado;
+    }
+  }
   IMAGENES_EMPLEADO_URL_BASE = IMAGENES_EMPLEADO_URL_BASE;
 
   empleados: Empleado[] = [];
@@ -35,9 +46,12 @@ export class RecursosHumanosView {
   formValido = true;
   newPassword: string = '';
 
-  visibleModalNuevoEmpleado = true;
+  visibleModalNuevoEmpleado = false;
+  visibleModalVerEmpleado = false;
 
   aliasEmpleadoBuscado = '';
+
+  loading = false;
 
   constructor(
     private proySrv: ProyIngSoftService,
@@ -79,6 +93,8 @@ export class RecursosHumanosView {
   marcarComoDirty(): boolean {
     if (!this.empleado) return false;
 
+    if (this.visibleModalNuevoEmpleado) return true;
+
     if (
       this.empleado.nombre &&
       this.empleado.apellido &&
@@ -86,7 +102,6 @@ export class RecursosHumanosView {
       this.empleado.telefono &&
       this.empleado.alias &&
       this.empleado.salario &&
-      this.empleado.observaciones &&
       this.empleado.puesto.id &&
       this.empleado.genero.id &&
       this.empleado.tipoPago.id
@@ -122,8 +137,10 @@ export class RecursosHumanosView {
     if (!this.marcarComoDirtyNuevoEmpleado()) {
       return this.alerta.showWarn('Por favor, llene todos los campos');
     }
-    this.proySrv.EMPLEADOS.crearEmpleado(this.newEmpleado).subscribe(() => {
+    this.proySrv.EMPLEADOS.crearEmpleado(this.newEmpleado).subscribe((res) => {
       this.alerta.showSuccess('Empleado creado!');
+      this.visibleModalNuevoEmpleado = false;
+      this.empleado = structuredClone(res);
       this.formValido = true;
       this.obtenerEmpleados();
     });
@@ -144,8 +161,19 @@ export class RecursosHumanosView {
     this.newPassword = '';
   }
 
+  selectEmpleado(empleado: Empleado) {
+    this.empleado = structuredClone(empleado);
+    this.aliasEmpleadoBuscado = this.empleado.alias;
+    this.newPassword = '';
+  }
+
   handleClickInhabilitado() {
     if (!this.empleado) return this.alerta.showWarn('Seleccione un empleado');
+
+    if (!this.marcarComoDirty()) {
+      this.alerta.showWarn('Hay algunos campos vacíos');
+      return;
+    }
 
     this.empleado.inhabilitado = !this.empleado.inhabilitado;
     this.updateEmpleados();
@@ -184,14 +212,14 @@ export class RecursosHumanosView {
       observaciones,
       inhabilitado,
     };
+    this.loading = true;
     this.proySrv.EMPLEADOS.updateEmpleado({
       id,
       updatedEmpleado: updatedEmpleado,
     }).subscribe(() => {
-      if (this.marcarComoDirty()) {
-        this.formValido = true;
-        this.alerta.showSuccess('Empleado actualizado!');
-      }
+      this.loading = false;
+      this.formValido = true;
+      this.alerta.showSuccess('Empleado actualizado!');
       this.obtenerEmpleados();
     });
   }
@@ -250,5 +278,9 @@ export class RecursosHumanosView {
     return `${IMAGENES_EMPLEADO_URL_BASE}${
       empleado.id
     }.jpeg?pseudo=${Date.now()}`;
+  }
+
+  toggleModalVerEmpleados() {
+    this.visibleModalVerEmpleado = !this.visibleModalVerEmpleado;
   }
 }

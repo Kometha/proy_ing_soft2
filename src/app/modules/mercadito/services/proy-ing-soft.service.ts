@@ -53,7 +53,7 @@ export class ProyIngSoftService {
         map(({ message, data }) => {
           if (!data) {
             this.alerta.showWarn(message);
-            return;
+            return false;
           }
           sessionStorage.setItem(DATA_USER_KEY, JSON.stringify(data));
           this.PERMISOS.setPermisos();

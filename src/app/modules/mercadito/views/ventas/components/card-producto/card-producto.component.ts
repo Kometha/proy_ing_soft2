@@ -24,14 +24,17 @@ export class CardProductoComponent {
     const [firstPrecio] = producto.precios;
 
     if (firstPrecio) {
-      return `L. ${firstPrecio.precio}`;
+      return `L. ${firstPrecio.precio.toFixed(2)}`;
     }
 
     return `N/A`;
   }
 
   getInventarioProducto(producto: Producto) {
-    return producto.inventario.reduce((acc, inv) => acc + inv.cantidad, 0);
+    const inventarioDeTienda1 =
+      producto.inventario.find((i) => i.tienda.id === 1)?.cantidad ?? 35;
+
+    return inventarioDeTienda1;
   }
 
   handleClickAddToCart() {

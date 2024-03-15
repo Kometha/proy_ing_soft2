@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  host: 'http://localhost:3000/',
+  host: 'https://allasenlinea.com:9191/',
+  // host: 'http://localhost:3000/',
 };

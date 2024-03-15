@@ -1,7 +1,9 @@
 <app-header colorClass="purple"> Mercadeo </app-header>
 <main class="text-appPrimary-50 p-5">
   <div class="w-full grid grid-cols-12 max-md:grid-cols-1 gap-3">
-    <section class="flex flex-col col-start-1 col-end-4 max-md:col-start-1 max-md:col-end-1">
+    <section
+      class="flex flex-col col-start-1 col-end-4 max-md:col-start-1 max-md:col-end-1"
+    >
       <header>
         <h1 class="text-xl font-bold text-appPrimary-200">
           ¡Bienvenido al módulo de Mercadeo!
@@ -23,6 +25,7 @@
           <span class="mt-2 flex gap-3">
             <small class="text-xsm text-blue-300">
               <kbd
+                (click)="toggleModalBuscarProducto()"
                 class="px-2 py-1 text-xs text-center items-center font-semibold rounded-lg bg-blue-600 text-blue-100 border-blue-500 mr-1"
                 >F2</kbd
               >
@@ -30,6 +33,7 @@
             </small>
             <small class="text-xsm text-green-300">
               <kbd
+                (click)="toggleModalCrearProducto()"
                 class="px-2 py-1 text-xs text-center items-center font-semibold rounded-lg bg-green-600 text-green-100 border-green-500 mr-1"
                 >F8</kbd
               >
@@ -105,7 +109,9 @@
         }
       </div>
     </section>
-    <section class="w-full col-start-4 col-end-13 flex flex-col gap-3 max-md:col-start-1 max-md:col-end-1">
+    <section
+      class="w-full col-start-4 col-end-13 flex flex-col gap-3 max-md:col-start-1 max-md:col-end-1"
+    >
       <header class="text-lg text-appPrimary-200">
         Información del Producto
       </header>
@@ -115,7 +121,9 @@
         producto
       </h3>
       } @else {
-      <main class="w-full grid box-content grid-cols-2 p-2 gap-3 max-md:grid-cols-1">
+      <main
+        class="w-full grid box-content grid-cols-2 p-2 gap-3 max-md:grid-cols-1"
+      >
         <fieldset class="flex flex-col gap-2">
           <legend>Datos básicos</legend>
           <div class="flex flex-col w-full mt-1 gap-2">
@@ -511,7 +519,19 @@
                 <tbody>
                   @for (inv of newProducto.inventario; track $index) {
                   <tr class="*:px-6 *:py-3">
-                    <td>{{ inv.tienda.descripcion }}</td>
+                    <td>
+                      <div class="flex flex-col gap-1">
+                        <span>
+                          {{ inv.tienda.descripcion }}
+                        </span>
+                        <small class="text-red-400">
+                          {{
+                            getFechaVencimientoSegunInventario(inv.cantidad)
+                              | date : "dd/MMMM/yyyy"
+                          }}
+                        </small>
+                      </div>
+                    </td>
                     <td class="text-center">
                       <span
                         class="font-bold
@@ -524,6 +544,9 @@
                         }}"
                       >
                         {{ inv.cantidad }}
+                      </span>
+                      <span>
+                        • De: {{ getInventarioTotal(inv.cantidad) }}
                       </span>
                     </td>
                   </tr>
